@@ -1,0 +1,7 @@
+extends layout
+
+block content
+	h1= title
+	form(method='post', action='/')
+		input(type='text', name='term')
+		input(type='submit', value='Search')
