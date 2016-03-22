@@ -1,0 +1,10 @@
+extends layout
+
+block content
+	h1= title
+	form(id = "searchres", method='post', action='/')
+		input(type='text', name='term')
+		input(type='submit', value='Search', onclick="myFunction()")
+	script
+		function myFunction() {document.getElementById("searchres").submit()}
+
