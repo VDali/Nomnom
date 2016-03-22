@@ -21,16 +21,30 @@ router.post('/',function(req,res, next) {
   });
 
   // See http://www.yelp.com/developers/documentation/v2/search_api
-  yelp.search({ term: term, location: loc, radius_filter: '8050'})
+  yelp.search({ term: term, location: loc})
     .then(function (data) {
-        //res.send(data);
         var s = JSON.stringify(data);
         var obj = JSON.parse(s);
         var arrayLen = obj.businesses.length;
-        res.write("Restaurant Name \t Rating\n");
+        res.write("Restaurant Name \t Rating \t Address \t Phone Number \t Open?\n");
         for (var i = 0; i < arrayLen; i++) {
-            res.write(obj.businesses[i].name +"\t" + obj.businesses[i].rating + "\\5" +"\n");
-            //res.json({message: 'got to line 28'});
+            var temp = obj.businesses[i];
+            res.write(temp.name +"\t");
+            res.write(temp.rating + "\\5" +"\t");
+            var tempaddr = temp.location.address;
+            for (var j = 0; j < tempaddr.length; j++) {
+                res.write(tempaddr[j]);
+                if (j < (tempaddr.length - 1)) {
+                    res.write(",");
+                }
+            }
+            res.write("\t" + temp.display_phone);
+            if (temp.is_closed == false){
+                res.write("\tYes");
+            } else {
+                res.write("\tNo");
+            }
+            res.write("\n\n");
         }
         res.end()
     })
