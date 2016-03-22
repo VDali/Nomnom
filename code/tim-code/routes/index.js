@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 // Request API access: http://www.yelp.com/developers/getting_started/api_access
-router.post('/',function(req,res) {
+router.post('/',function(req,res, next) {
   var Yelp = require('yelp');
 
   var yelp = new Yelp({
@@ -18,9 +18,17 @@ router.post('/',function(req,res) {
   });
 
   // See http://www.yelp.com/developers/documentation/v2/search_api
-  yelp.search({ term: 'Restaurants', location: 'Boston' })
+  yelp.search({ term: "Restaurant", location: 'Boston' })
     .then(function (data) {
-      res.send(data);
+        //res.send(data);
+        var s = JSON.stringify(data);
+        var obj = JSON.parse(s);
+        var arrayLen = obj.businesses.length;
+        for (var i = 0; i < arrayLen; i++) {
+            res.write(obj.businesses[i].name +"\n");
+            //res.json({message: 'got to line 28'});
+        }
+        res.end()
     })
     .catch(function (err) {
       res.send(err);
