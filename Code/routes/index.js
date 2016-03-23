@@ -21,21 +21,37 @@ router.post('/',function(req,res, next) {
   });
 
   // See http://www.yelp.com/developers/documentation/v2/search_api
-  yelp.search({ term: term, location: loc, radius_filter: '8050'})
+  yelp.search({ term: term, location: loc, sort: '1'})
     .then(function (data) {
         //res.send(data);
         var s = JSON.stringify(data);
         var obj = JSON.parse(s);
         var arrayLen = obj.businesses.length;
-        res.write("Restaurant Name \t Rating\n");
+        res.write(term + " in " + loc +":\n");
+        res.write("Name \t Rating \t Address \t Categories \t Phone\n");
         for (var i = 0; i < arrayLen; i++) {
-            res.write(obj.businesses[i].name +"\t" + obj.businesses[i].rating + "\\5" +"\n");
-            //res.json({message: 'got to line 28'});
+            var busin = obj.businesses[i];
+            if (busin.location.address != "") {
+                res.write(busin.name + " \t ");
+                res.write(busin.rating + "\\5 \t ");
+                res.write(busin.location.address + ", ");
+                res.write(busin.location.city + " \t ");
+                //res.write(busin.categories[0][0]);
+                for (var j = 0; j < busin.categories.length; j++) {
+                    res.write(busin.categories[j][0]);
+                    if (j < (busin.categories.length - 1)) {
+                        res.write(", ");
+                    }
+                }
+                res.write(" \t ");
+                res.write(busin.display_phone +" \t ");
+                res.write("\n");
+            }
         }
         res.end()
     })
     .catch(function (err) {
-      res.send(err);
+        res.send(err);
     });
 });
 
