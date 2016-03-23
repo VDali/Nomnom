@@ -3,12 +3,8 @@ extends layout
 block content
     h1= title
     form(id = "searchres", method='post', action='/')
-        |  Find...
+        input(type='text', id="term", name='term', placeholder ="Find...")
         br
-        input(type='text', id="term", name='term')
-        br
-        | in...
-        br
-        input(type='text', id = "location", name='location')
+        input(type='text', id = "location", name='location', placeholder ="Near...")
         br
         input(type='submit', value='Search')
