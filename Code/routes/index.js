@@ -27,16 +27,16 @@ router.post('/',function(req,res, next) {
         var s = JSON.stringify(data);
         var obj = JSON.parse(s);
         var arrayLen = obj.businesses.length;
-        res.write(term + " in " + loc +":\n");
-        res.write("Name \t Rating \t Address \t Categories \t Phone\n");
+        res.write(term + " near " + loc +":\n");
+        res.write("Name \t Rating \t Total Reviews \t Address \t Categories \t Phone\n");
         for (var i = 0; i < arrayLen; i++) {
             var busin = obj.businesses[i];
             if (busin.location.address != "") {
                 res.write(busin.name + " \t ");
                 res.write(busin.rating + "\\5 \t ");
+                res.write(busin.review_count + " \t ");
                 res.write(busin.location.address + ", ");
                 res.write(busin.location.city + " \t ");
-                //res.write(busin.categories[0][0]);
                 for (var j = 0; j < busin.categories.length; j++) {
                     res.write(busin.categories[j][0]);
                     if (j < (busin.categories.length - 1)) {
