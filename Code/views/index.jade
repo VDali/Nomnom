@@ -1,10 +1,17 @@
 extends layout
 
 block content
-    h1= title
-    form(id = "searchres", method='post', action='/')
-        input(type='text', id="term", name='term', placeholder ="Find...")
-        br
-        input(type='text', id = "location", name='location', placeholder ="Near...")
-        br
-        input(type='submit', value='Search')
+    //h1= title
+    //form(method='post')
+        //input(type='text', id="term", name='term', placeholder ="Find...")
+        //input(type='text', id = "location", name='location', placeholder ="Near...")
+        //input(type='submit', value='Search')
+        //br
+        //br
+    form(class="navbar navbar-default", role="search", method='post')
+        div(class="container-fluid")
+            div(class="form-group")
+                a(class="navbar-brand", href="#") NomNom
+                input(type='text', id="term", name='term', placeholder ="Find...", class="form-control")
+                input(type='text', id = "location", name='location', placeholder ="Near...", class="form-control")
+            button(type='submit', class="btn btn-default") Search

@@ -1,0 +1,25 @@
+include index
+
+div(class="well well-lg tex-center")
+    table(class="table")
+        thead
+            th
+            th Name
+            th Rating
+            th Total Reviews
+            th Address
+            th Categories
+        tbody
+            each r in result
+                tr(align=center)
+                    td
+                        img(src= r.image_url, alt=r.name, class="img-circle")
+                    td(align=center) #{r.name}
+                    td #{r.rating+"\\5"}
+                    td #{r.review_count}
+                    td #{r.location.address+", "+r.location.city}
+                    - var cat = "| ";
+                    - var len = r.categories.length;
+                    each i in r.categories
+                        - cat += i[0] + " | ";
+                    td #{cat}
