@@ -1,25 +1,23 @@
-include index
+include ../public/index.html
 
-div(class="well well-lg tex-center")
-    table(class="table")
-        thead
-            th
-            th Name
-            th Rating
-            th Total Reviews
-            th Address
-            th Categories
-        tbody
-            each r in result
-                tr(align=center)
-                    td
-                        img(src= r.image_url, alt=r.name, class="img-circle")
-                    td(align=center) #{r.name}
-                    td #{r.rating+"\\5"}
-                    td #{r.review_count}
-                    td #{r.location.address+", "+r.location.city}
-                    - var cat = "| ";
-                    - var len = r.categories.length;
-                    each i in r.categories
-                        - cat += i[0] + " | ";
-                    td #{cat}
+ul(class="media-list")
+    -var index = 1;
+    h2(align="center") #{"Closest "+term+" near " +location}
+    each r in result
+        if r.location.address != ""
+            div(class ="well col-xs-6")
+                li(class="media")
+                    div(class="media-left media-middle")
+                        img(src= r.image_url, alt=r.name, class="media-object img-circle", height="70", width="70")
+                    div(class="media-body")
+                        h4(class="media-heading")
+                            b
+                                ins #{index + ".\) " + r.name}
+                            br
+                            -var addr = r.location.address+", "+r.location.city;
+                            a(href="http://maps.google.com/?q=" + r.name + " " + addr + "," + r.location.state_code + " " + r.location.postal_code)
+                                i #{addr}
+                        div(class="media-body")
+                            img(src=r.rating_img_url_large, alt=r.name+" Rating", height="20", width="100")
+                            small #{" " + r.review_count + " Yelp reviews"}
+            - index++

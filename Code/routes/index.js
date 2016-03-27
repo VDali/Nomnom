@@ -17,22 +17,10 @@ router.post('/',function(req,res, next) {
             var s = JSON.stringify(data);
             var obj = JSON.parse(s);
             var result = obj.businesses;
-            console.log("Starting");
-            console.log(result.length);
-            //for (var i = 0; i < result.length; i++) {
-                //result[i].mobile_url = res[i].mobile_url.substring(0, result[i].mobile_url.indexOf("?"));
-                //result[i].url = result[i].url.substring(0, result[i].url.indexOf("?"));
-                //console.log("Cleaned URLS");
-                //for (var j = 0; j < result[i].categories.length; j++) {
-                    //result[i].categories[j].splice(0,1);
-                //}
-                //console.log("Cleaned Categories");
-            //}
-            console.log(result[0]);
-            res.render('search', { title: 'NomNom', result: result });
+            res.render('search', { title: 'NomNom', result: result, term: term, location: loc});
         })
         .catch(function (err) {
-            res.render('search', { title: 'NomNom', result: "" });
+            res.render('search', { title: 'NomNom', result: "None", term: term, location: loc});
         });
 });
 

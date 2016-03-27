@@ -1,5 +1,5 @@
 doctype html
-html
+html(ng-app="nomnom")
   head
     title= title
     meta( charset='utf-8' )
@@ -7,7 +7,13 @@ html
     meta( name='viewport', content='width=device-width, initial-scale=1.0' )
     meta( name='description', content='NomNom' )
     link(href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/flatly/bootstrap.min.css", rel="stylesheet")
+    // CSS
+    link(rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/flatly/bootstrap.min.css")
     link(rel='stylesheet', href='/stylesheets/style.css')
+    // JQuery
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js")
+    // Angular
     script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js")
+
   body
     block content
