@@ -2,22 +2,30 @@ include ../public/index.html
 
 ul(class="media-list")
     -var index = 1;
-    h2(align="center") #{"Closest "+term+" near " +location}
-    each r in result
-        if r.location.address != ""
-            div(class ="well col-xs-6")
-                li(class="media")
-                    div(class="media-left media-middle")
-                        img(src= r.image_url, alt=r.name, class="media-object img-circle", height="70", width="70")
-                    div(class="media-body")
-                        h4(class="media-heading")
-                            b
-                                ins #{index + ".\) " + r.name}
-                            br
-                            -var addr = r.location.address+", "+r.location.city;
-                            a(href="http://maps.google.com/?q=" + r.name + " " + addr + "," + r.location.state_code + " " + r.location.postal_code)
-                                i #{addr}
+    if result != "None"
+        h2(align="center") #{"Closest \'"+term+"\' near " +location}
+        each r in result
+            if r.location.address
+                -var jsonURL = "https://maps.googleapis.com/maps/api/place/textsearch/json?key=AIzaSyBOi5Nu5k9NCoyNLv2wjK-TvlDYu_33vc8&query=" + gCode;
+                div(class ="well col-md-6 col-xs-12")
+                    li(class="media")
+                        div(class="media-left media-middle")
+                            img(src= r.image_url, alt=r.name, class="media-object img-circle", height="80", width="80")
                         div(class="media-body")
-                            img(src=r.rating_img_url_large, alt=r.name+" Rating", height="20", width="100")
-                            small #{" " + r.review_count + " Yelp reviews"}
+                            div(class="media-heading")
+                                h4
+                                    b
+                                        ins #{index + ".\) " + r.name}
+                                    br
+                                -var addr = r.location.address+", "+r.location.city
+                                -var s = r.name + " " + addr + ", " + r.location.state_code + " " + r.location.postal_code;
+                                -s = s.split(' ').join('+')
+                                -var start = location.split(' ').join('+');
+                                -var link = "https://www.google.com/maps/dir/"+start+"/"+s;
+                                a(href= link) #{addr}
+                            div(class="media-body")
+                                img(src=r.rating_img_url_large, alt=r.name+" Rating", height="20", width="100")
+                                small #{" " + r.review_count + " Yelp reviews"}
             - index++
+    else
+        h2(align="center") #{"Cannot find \'"+term+"\' near " +location}
