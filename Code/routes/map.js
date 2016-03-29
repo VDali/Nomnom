@@ -1,46 +1,78 @@
-//Calling the locateme function when the document finishes loading
-$(document).ready(function() {
-    locateMe();
-});
-
-//Function to locate the user
-var locateMe = function(){
-    var map_element= $('#map');
-    if (navigator.geolocation) {
-        var position= navigator.geolocation.getCurrentPosition(loadMap);
-    } else {
-        map_element.innerHTML = "Geolocation is not supported by this browser.";
+//Data
+var cities = [
+    {
+        city : 'Toronto',
+        desc : 'This is the best city in the world!',
+        lat : 43.7000,
+        long : -79.4000
+    },
+    {
+        city : 'New York',
+        desc : 'This city is aiiiiite!',
+        lat : 40.6700,
+        long : -73.9400
+    },
+    {
+        city : 'Chicago',
+        desc : 'This is the second best city in the world!',
+        lat : 41.8819,
+        long : -87.6278
+    },
+    {
+        city : 'Los Angeles',
+        desc : 'This city is live!',
+        lat : 34.0500,
+        long : -118.2500
+    },
+    {
+        city : 'Las Vegas',
+        desc : 'Sin City...\'nuff said!',
+        lat : 36.0800,
+        long : -115.1522
     }
-};
+];
 
-//Lets load the mop using the position
-var loadMap = function(position) {
-    var loading= $('#loading');
-    var latitude=position.coords.latitude;
-    var longitude=position.coords.longitude;
-    var myLatlng = new google.maps.LatLng(latitude, longitude);
-    //Initializing the options for the map
-    var myOptions = {
-        center: myLatlng,
-        zoom: 15,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-    };
-    //Creating the map in teh DOM
-    var map_element=document.getElementById("map");
-    var map = new google.maps.Map(map_element,myOptions);
-    //Adding markers to it
-    var marker = new google.maps.Marker({
-        position: myLatlng,
-        map: map,
-        title: 'You are here'
+//Angular App Module and Controller
+angular.module('mapsApp', [])
+    .controller('MapCtrl', function ($scope) {
+
+        var mapOptions = {
+            zoom: 4,
+            center: new google.maps.LatLng(40.0000, -98.0000),
+            mapTypeId: google.maps.MapTypeId.TERRAIN
+        }
+
+        $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+        $scope.markers = [];
+
+        var infoWindow = new google.maps.InfoWindow();
+
+        var createMarker = function (info){
+
+            var marker = new google.maps.Marker({
+                map: $scope.map,
+                position: new google.maps.LatLng(info.lat, info.long),
+                title: info.city
+            });
+            marker.content = '<div class="infoWindowContent">' + info.desc + '</div>';
+
+            google.maps.event.addListener(marker, 'click', function(){
+                infoWindow.setContent('<h2>' + marker.title + '</h2>' + marker.content);
+                infoWindow.open($scope.map, marker);
+            });
+
+            $scope.markers.push(marker);
+
+        }
+
+        for (i = 0; i < cities.length; i++){
+            createMarker(cities[i]);
+        }
+
+        $scope.openInfoWindow = function(e, selectedMarker){
+            e.preventDefault();
+            google.maps.event.trigger(selectedMarker, 'click');
+        }
+
     });
-    //Adding the Marker content to it
-    var infowindow = new google.maps.InfoWindow({
-        content: "<h2>You are here :)</h2>",
-        //Settingup the maxwidth
-        maxWidth: 300
-    });
-    //Event listener to trigger the marker content
-    google.maps.event.addListener(marker, 'click', function() {
-        infowindow.open(map,marker);});
-};
