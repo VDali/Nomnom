@@ -1,31 +1,83 @@
-include ../public/index.html
-
-ul(class="media-list")
-    -var index = 1;
-    if result != "None"
-        h2(align="center") #{"Closest \'"+term+"\' near " +location}
+include ../public/header.html
+br
+if result != "None"
+    h2(align="center", class="page-header") #{"Closest \'"+term+"\' near " +location}
+    script(src='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.js')
+    link(href='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.css' rel='stylesheet')
+    style.
+        body { margin:0; padding:0; }
+        .map { position: relative; width:100%; height:400px; z-index:100;}
+    div(class="row" align="center")
+        div(class='container-fluid')
+            div(id='map-mapbox' class='map col-xs-8')
+                div(id='map-leaflet' class='map' style="align-content: center")
+                - var loc = location;
+                script.
+                    L.mapbox.accessToken = 'pk.eyJ1IjoidGltYmFnYnkiLCJhIjoiY2ltZmJ3b3AyMDFkanUxbHZ4bGxmczNkdiJ9.eCfTjhCRYWo-MQ19nSv-BQ';
+                    var geocoder = L.mapbox.geocoder('mapbox.places');
+                    var mapLeaflet = L.mapbox.map('map-leaflet', 'mapbox.streets');
+                    mapLeaflet.scrollWheelZoom.disable();
+                    geocoder.query('10 Buick St, Boston, MA', showMap);
+                    function showMap(err, data) {
+                        if (data.lbounds) {
+                            //alert(data.lbounds);
+                            mapLeaflet.fitBounds(data.lbounds);
+                            L.marker([data.lbounds[0], data.lbounds[1]]).addTo(mapLeaflet);
+                        } else if (data.latlng) {
+                            //alert(data.latlng);
+                            mapLeaflet.setView([data.latlng[0], data.latlng[1]], 16);
+                            L.marker([data.latlng[0], data.latlng[1]]).addTo(mapLeaflet);
+                        }
+                    }
+                    //L.marker([42.35085, -71.117]).addTo(mapLeaflet);
+                    //L.marker([42.35044, -71.11526]).addTo(mapLeaflet);
+    br
+    - var index = 1;
+    div(class="container-fluid")
         each r in result
-            if r.location.address
-                -var jsonURL = "https://maps.googleapis.com/maps/api/place/textsearch/json?key=AIzaSyBOi5Nu5k9NCoyNLv2wjK-TvlDYu_33vc8&query=" + gCode;
-                div(class ="well col-md-6 col-xs-12")
-                    li(class="media")
+            if (r.location.address)
+                div(class ="col-md-5 col-sm-8 well", id=r.id, style ="margin: 7px; left:7%")
+                    div(class="media")
                         div(class="media-left media-middle")
-                            img(src= r.image_url, alt=r.name, class="media-object img-circle", height="80", width="80")
-                        div(class="media-body")
-                            div(class="media-heading")
-                                h4
-                                    b
-                                        ins #{index + ".\) " + r.name}
-                                    br
-                                -var addr = r.location.address+", "+r.location.city
-                                -var s = r.name + " " + addr + ", " + r.location.state_code + " " + r.location.postal_code;
-                                -s = s.split(' ').join('+')
-                                -var start = location.split(' ').join('+');
-                                -var link = "https://www.google.com/maps/dir/"+start+"/"+s;
-                                a(href= link) #{addr}
-                            div(class="media-body")
+                            img(src= r.image_url, class="img-rounded media-object", height="80", width="80")
+                        div(class="media-body media-left")
+                            h4(class="media-heading")
+                                b
+                                    if(r.name.length <= 27)
+                                        u #{index + ". " + r.name}
+                                    else
+                                        u #{index + ". " + r.name.substring(0,24)+ "..."}
+                            h3(class="media-heading")
+                                small
+                                    - var addr = r.location.address+","+r.location.city
+                                    - addr = addr.split(',').join(', ')
+                                    - var s = r.name + " " + addr + ", " + r.location.state_code + " " + r.location.postal_code;
+                                    - s = s.split(' ').join('+')
+                                    - var start = location.split(' ').join('+');
+                                    - var link = "https://www.google.com/maps/dir/"+start+"/"+s;
+                                    if (r.location.address != "")
+                                        if (addr.length <= 38)
+                                            a(href= link) #{addr}
+                                        else
+                                            a(href= link, alt= addr) #{addr.substring(0,35) + "..."}
+                                    else
+                                        | Food Truck
+                            p
                                 img(src=r.rating_img_url_large, alt=r.name+" Rating", height="20", width="100")
-                                small #{" " + r.review_count + " Yelp reviews"}
-            - index++
-    else
-        h2(align="center") #{"Cannot find \'"+term+"\' near " +location}
+                                | #{" "}
+                                a(href="http://www.yelp.com/biz/"+r.id) #{r.review_count + " Yelp reviews"}
+                                br
+                                span(class="glyphicon glyphicon-time")
+                                | #{" "}
+                                | Open Now?
+                                | #{" | "}
+                                span(class="glyphicon glyphicon-cutlery")
+                                | #{" "}
+                                if (r.location.address != "")
+                                    a(href= "http://www.yelp.com/menu/" + r.id ) Full Menu
+                                    | #{" | "}
+                            script.
+                                L.marker([r.location.coordinate.latitude, r.location.coordinate.longitude]).addTo(mapLeaflet);
+                 - index++
+else
+    h2(align="center", class="page-header") #{"Could not find \'"+term+"\' near " +location}
