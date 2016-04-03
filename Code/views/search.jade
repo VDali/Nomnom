@@ -4,6 +4,7 @@ if result != "None"
     h2(align="center", class="page-header") #{"Closest \'"+term+"\' near " +location}
     script(src='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.js')
     link(href='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.css' rel='stylesheet')
+    script(src="Leaflet.MakiMarkers.js")
     style.
         body { margin:0; padding:0; }
         .map { position: relative; width:100%; height:400px; z-index:100;}
@@ -11,26 +12,30 @@ if result != "None"
         div(class='container-fluid')
             div(id='map-mapbox' class='map col-xs-8')
                 div(id='map-leaflet' class='map' style="align-content: center")
-                - var loc = location;
                 script.
+                    var loc="#{location}";
+                    console.log("test");
+                    console.log("loc? ", loc);
                     L.mapbox.accessToken = 'pk.eyJ1IjoidGltYmFnYnkiLCJhIjoiY2ltZmJ3b3AyMDFkanUxbHZ4bGxmczNkdiJ9.eCfTjhCRYWo-MQ19nSv-BQ';
                     var geocoder = L.mapbox.geocoder('mapbox.places');
                     var mapLeaflet = L.mapbox.map('map-leaflet', 'mapbox.streets');
                     mapLeaflet.scrollWheelZoom.disable();
-                    geocoder.query('10 Buick St, Boston, MA', showMap);
+                    geocoder.query(loc, showMap);
                     function showMap(err, data) {
                         if (data.lbounds) {
-                            //alert(data.lbounds);
-                            mapLeaflet.fitBounds(data.lbounds);
-                            L.marker([data.lbounds[0], data.lbounds[1]]).addTo(mapLeaflet);
+                            mapLeaflet.fitBounds(data.lbounds, 10);
                         } else if (data.latlng) {
-                            //alert(data.latlng);
                             mapLeaflet.setView([data.latlng[0], data.latlng[1]], 16);
-                            L.marker([data.latlng[0], data.latlng[1]]).addTo(mapLeaflet);
+                            var marker = L.marker([data.latlng[0], data.latlng[1]], {
+                                icon: L.mapbox.marker.icon({
+                                    'marker-size': 'large',
+                                    'marker-symbol': 'star',
+                                    'marker-color': '#fa0'
+                                })
+                            }).addTo(mapLeaflet);
+                            marker.bindPopup("<b>Starter Location</b>").openPopup();
                         }
                     }
-                    //L.marker([42.35085, -71.117]).addTo(mapLeaflet);
-                    //L.marker([42.35044, -71.11526]).addTo(mapLeaflet);
     br
     - var index = 1;
     div(class="container-fluid")
@@ -77,7 +82,24 @@ if result != "None"
                                     a(href= "http://www.yelp.com/menu/" + r.id ) Full Menu
                                     | #{" | "}
                             script.
-                                L.marker([r.location.coordinate.latitude, r.location.coordinate.longitude]).addTo(mapLeaflet);
+                                var name = "#{r.name}"
+                                var addr = "#{addr}"
+                                var addrTest = "#{r.location.address}"
+                                var lat ="#{r.location.coordinate.latitude}";
+                                var lng ="#{r.location.coordinate.longitude}";
+                                var place = L.marker([lat, lng],{
+                                    icon: L.mapbox.marker.icon({
+                                        'marker-size': 'medium',
+                                        'marker-symbol': "#{index}",
+                                        'marker-color': '#94ac21'
+                                    })
+                                }).addTo(mapLeaflet);
+                                if (addrTest != "") {
+                                    var popup = L.popup().setContent("<b>"+name+"</b>" + "<br>" + addr);
+                                } else {
+                                    var popup = L.popup().setContent("<b>"+name+"</b>" + "<br>" + "Usually Around This Area");
+                                }
+                                place.bindPopup(popup);
                  - index++
 else
     h2(align="center", class="page-header") #{"Could not find \'"+term+"\' near " +location}

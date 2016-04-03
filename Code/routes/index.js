@@ -56,7 +56,7 @@ router.post('/',function(req,res, next) {
     parameters['title'] = "NomNom";
     parameters['location'] = loc;
     parameters['term'] = term;
-    yelp.search({term: term, location: loc, sort: '1'})
+    yelp.search({term: term, location: loc, sort: '1', radius_filter: '1610'})
         .then(function (data) {
             var s = JSON.stringify(data);
             var obj = JSON.parse(s);
