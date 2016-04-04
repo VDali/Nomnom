@@ -1,105 +1,116 @@
 include ../public/header.html
 br
-if result != "None"
-    h2(align="center", class="page-header") #{"Closest \'"+term+"\' near " +location}
-    script(src='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.js')
-    link(href='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.css' rel='stylesheet')
-    script(src="Leaflet.MakiMarkers.js")
-    style.
-        body { margin:0; padding:0; }
-        .map { position: relative; width:100%; height:400px; z-index:100;}
-    div(class="row" align="center")
-        div(class='container-fluid')
-            div(id='map-mapbox' class='map col-xs-8')
-                div(id='map-leaflet' class='map' style="align-content: center")
-                script.
-                    var loc="#{location}";
-                    console.log("test");
-                    console.log("loc? ", loc);
-                    L.mapbox.accessToken = 'pk.eyJ1IjoidGltYmFnYnkiLCJhIjoiY2ltZmJ3b3AyMDFkanUxbHZ4bGxmczNkdiJ9.eCfTjhCRYWo-MQ19nSv-BQ';
-                    var geocoder = L.mapbox.geocoder('mapbox.places');
-                    var mapLeaflet = L.mapbox.map('map-leaflet', 'mapbox.streets');
-                    mapLeaflet.scrollWheelZoom.disable();
-                    geocoder.query(loc, showMap);
-                    function showMap(err, data) {
-                        if (data.lbounds) {
-                            mapLeaflet.fitBounds(data.lbounds, 10);
-                        } else if (data.latlng) {
-                            mapLeaflet.setView([data.latlng[0], data.latlng[1]], 16);
-                            var marker = L.marker([data.latlng[0], data.latlng[1]], {
-                                icon: L.mapbox.marker.icon({
-                                    'marker-size': 'large',
-                                    'marker-symbol': 'star',
-                                    'marker-color': '#fa0'
-                                })
-                            }).addTo(mapLeaflet);
-                            marker.bindPopup("<b>Starter Location</b>").openPopup();
-                        }
-                    }
-    br
-    - var index = 1;
-    div(class="container-fluid")
-        each r in result
-            if (r.location.address)
-                div(class ="col-md-5 col-sm-8 well", id=r.id, style ="margin: 7px; left:7%")
-                    div(class="media")
-                        div(class="media-left media-middle")
-                            img(src= r.image_url, class="img-rounded media-object", height="80", width="80")
-                        div(class="media-body media-left")
-                            h4(class="media-heading")
-                                b
-                                    if(r.name.length <= 27)
-                                        u #{index + ". " + r.name}
-                                    else
-                                        u #{index + ". " + r.name.substring(0,24)+ "..."}
-                            h3(class="media-heading")
-                                small
-                                    - var addr = r.location.address+","+r.location.city
-                                    - addr = addr.split(',').join(', ')
-                                    - var s = r.name + " " + addr + ", " + r.location.state_code + " " + r.location.postal_code;
-                                    - s = s.split(' ').join('+')
-                                    - var start = location.split(' ').join('+');
-                                    - var link = "https://www.google.com/maps/dir/"+start+"/"+s;
-                                    if (r.location.address != "")
-                                        if (addr.length <= 38)
-                                            a(href= link) #{addr}
-                                        else
-                                            a(href= link, alt= addr) #{addr.substring(0,35) + "..."}
-                                    else
-                                        | Food Truck
-                            p
-                                img(src=r.rating_img_url_large, alt=r.name+" Rating", height="20", width="100")
-                                | #{" "}
-                                a(href="http://www.yelp.com/biz/"+r.id) #{r.review_count + " Yelp reviews"}
-                                br
-                                span(class="glyphicon glyphicon-time")
-                                | #{" "}
-                                | Open Now?
-                                | #{" | "}
-                                span(class="glyphicon glyphicon-cutlery")
-                                | #{" "}
-                                if (r.location.address != "")
-                                    a(href= "http://www.yelp.com/menu/" + r.id ) Full Menu
-                                    | #{" | "}
-                            script.
-                                var name = "#{r.name}"
-                                var addr = "#{addr}"
-                                var addrTest = "#{r.location.address}"
-                                var lat ="#{r.location.coordinate.latitude}";
-                                var lng ="#{r.location.coordinate.longitude}";
-                                var place = L.marker([lat, lng],{
+if (result !== 'None')
+    if (result.length > 0)
+        h2(align="center", class="page-header") #{"Closest \'"+term+"\' near " +location}
+        script(src='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.js')
+        link(href='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.css' rel='stylesheet')
+        style.
+            body { margin:0; padding:0; }
+            .map { position: relative; width:100%; height:400px; z-index:100;}
+        div(class="row" align="center")
+            div(class='container-fluid')
+                div(id='map-mapbox' class='map col-xs-8')
+                    div(id='map-leaflet' class='map' style="align-content: center")
+                    script.
+                        var loc="#{location}";
+                        L.mapbox.accessToken = 'pk.eyJ1IjoidGltYmFnYnkiLCJhIjoiY2ltZmJ3b3AyMDFkanUxbHZ4bGxmczNkdiJ9.eCfTjhCRYWo-MQ19nSv-BQ';
+                        var geocoder = L.mapbox.geocoder('mapbox.places');
+                        var mapLeaflet = L.mapbox.map('map-leaflet', 'mapbox.streets', 14);
+                        mapLeaflet.scrollWheelZoom.disable();
+                        geocoder.query(loc, showMap);
+                        function showMap(err, data) {
+                            if (data.lbounds) {
+                                mapLeaflet.fitBounds(data.lbounds);
+                                mapLeaflet.setZoom(12);
+                            } else if (data.latlng) {
+                                mapLeaflet.setView([data.latlng[0], data.latlng[1]], 15);
+                                var marker = L.marker([data.latlng[0], data.latlng[1]], {
                                     icon: L.mapbox.marker.icon({
-                                        'marker-size': 'medium',
-                                        'marker-symbol': "#{index}",
-                                        'marker-color': '#94ac21'
+                                        'marker-size': 'large',
+                                        'marker-symbol': 'star',
+                                        'marker-color': '#fa0'
                                     })
                                 }).addTo(mapLeaflet);
-                                if (addrTest != "") {
-                                    var popup = L.popup().setContent("<b>"+name+"</b>" + "<br>" + addr);
-                                } else {
-                                    var popup = L.popup().setContent("<b>"+name+"</b>" + "<br>" + "Usually Around This Area");
-                                }
-                                place.bindPopup(popup);
-                 - index++
+                                marker.bindPopup("<b>Starter Location</b>").openPopup();
+                            }
+                        }
+        br
+        - var index = 1;
+        div(class="container-fluid")
+            each r in result
+                if (r.location.address)
+                    div(class ="col-md-5 col-sm-8 well", id=r.id, style ="margin: 7px; left:7%")
+                        div(class="media")
+                            div(class="media-left media-middle")
+                                img(src= r.image_url, class="img-rounded media-object", height="80", width="80")
+                            div(class="media-body media-left")
+                                h4(class="media-heading")
+                                    b
+                                        if(r.name.length <= 27)
+                                            u #{index + ". " + r.name}
+                                        else
+                                            u #{index + ". " + r.name.substring(0,24)+ "..."}
+                                h3(class="media-heading")
+                                    small
+                                        - var addr = r.location.address+","+r.location.city
+                                        - addr = addr.split(',').join(', ')
+                                        - var s = r.name + " " + addr + ", " + r.location.state_code + " " + r.location.postal_code;
+                                        - s = s.split(' ').join('+')
+                                        - var start = location.split(' ').join('+');
+                                        - var link = "https://www.google.com/maps/dir/"+start+"/"+s;
+                                        if (r.location.address != "")
+                                            if (addr.length <= 38)
+                                                a(href= link) #{addr}
+                                            else
+                                                a(href= link, alt= addr) #{addr.substring(0,35) + "..."}
+                                        else
+                                            | Food Truck
+                                p
+                                    img(src=r.rating_img_url_large, alt=r.name+" Rating", height="20", width="100")
+                                    | #{" "}
+                                    a(href="http://www.yelp.com/biz/"+r.id) #{r.review_count + " Yelp reviews"}
+                                    br
+                                    span(class="glyphicon glyphicon-time")
+                                    | #{" "}
+                                    | Open Now?
+                                    | #{" | "}
+                                    if (r.menu_provider != undefined)
+                                        span(class="glyphicon glyphicon-cutlery")
+                                        | #{" "}
+                                        a(href= "http://www.yelp.com/menu/" + r.id ) Full Menu
+                                        | #{" | "}
+                                    br
+                                    - var catIndex = 0;
+                                    - var catstr = "";
+                                    small
+                                        each cat in r.categories
+                                            if (catIndex < (r.categories.length -1))
+                                                | #{cat[0] + ", "}
+                                                - catIndex ++;
+                                            else
+                                                | #{cat[0]}
+                                script.
+                                    var name = "#{r.name}"
+                                    var addr = "#{addr}"
+                                    var addrTest = "#{r.location.address}"
+                                    var lat ="#{r.location.coordinate.latitude}";
+                                    var lng ="#{r.location.coordinate.longitude}";
+                                    var place = L.marker([lat, lng],{
+                                        icon: L.mapbox.marker.icon({
+                                            'marker-size': 'medium',
+                                            'marker-symbol': "#{index}",
+                                            'marker-color': '#94ac21'
+                                        })
+                                    }).addTo(mapLeaflet);
+                                    if (addrTest != "") {
+                                        var popup = L.popup().setContent("<b>"+name+"</b>" + "<br>" + addr);
+                                    } else {
+                                        var popup = L.popup().setContent("<b>"+name+"</b>" + "<br>" + "Truck Usually Around This Area");
+                                    }
+                                    place.bindPopup(popup);
+                    - index++
+    else
+        h2(align="center", class="page-header") #{"Could not find \'" + term + "\' near " + location}
 else
     h2(align="center", class="page-header") #{"Could not find \'"+term+"\' near " +location}
