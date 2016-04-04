@@ -15,25 +15,20 @@ if (result !== 'None')
                     script.
                         var loc="#{location}";
                         L.mapbox.accessToken = 'pk.eyJ1IjoidGltYmFnYnkiLCJhIjoiY2ltZmJ3b3AyMDFkanUxbHZ4bGxmczNkdiJ9.eCfTjhCRYWo-MQ19nSv-BQ';
-                        var geocoder = L.mapbox.geocoder('mapbox.places');
-                        var mapLeaflet = L.mapbox.map('map-leaflet', 'mapbox.streets', 14);
+                        var mapLeaflet = L.mapbox.map('map-leaflet', 'mapbox.streets');
                         mapLeaflet.scrollWheelZoom.disable();
-                        geocoder.query(loc, showMap);
-                        function showMap(err, data) {
-                            if (data.lbounds) {
-                                mapLeaflet.fitBounds(data.lbounds);
-                                mapLeaflet.setZoom(12);
-                            } else if (data.latlng) {
-                                mapLeaflet.setView([data.latlng[0], data.latlng[1]], 15);
-                                var marker = L.marker([data.latlng[0], data.latlng[1]], {
-                                    icon: L.mapbox.marker.icon({
-                                        'marker-size': 'large',
-                                        'marker-symbol': 'star',
-                                        'marker-color': '#fa0'
-                                    })
-                                }).addTo(mapLeaflet);
-                                marker.bindPopup("<b>Starter Location</b>").openPopup();
-                            }
+                        var googleLat="#{google.lat}";
+                        var googleLng="#{google.lng}";
+                        if (google != null) {
+                            mapLeaflet.setView([googleLat, googleLng], 15);
+                            var marker = L.marker([googleLat, googleLng], {
+                                icon: L.mapbox.marker.icon({
+                                    'marker-size': 'large',
+                                    'marker-symbol': 'star',
+                                    'marker-color': '#fa0'
+                                })
+                            }).addTo(mapLeaflet);
+                            marker.bindPopup("<b>Starter Location</b>");
                         }
         br
         - var index = 1;

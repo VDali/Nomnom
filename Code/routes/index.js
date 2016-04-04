@@ -13,13 +13,9 @@ function initYelp() {
     return yelp;
 }
 
-function initFactual() {
+function getFactual(id, country, factual) {
     var Factual = require('factual-api');
     var factual = new Factual('LSCM3IwVY4QaENnrM4tIsHXQodwp3ROQaJ0zADjX', 'Rcw2Z89qHfZBmKYQjEuBoyvHsAUKtk0ZvvayjDqT');
-    return factual;
-}
-
-function getFactual(id, country, factual) {
     if (country === "us" || country === "fr" || country === "gb" || country === "de" || country === "au") {
         var database = '/t/restaurants-' + country;
         var cross = '/t/crosswalk?filters={"url": "http://www.yelp.com/biz/' + id + '"}';
@@ -41,6 +37,12 @@ function getFactual(id, country, factual) {
     }
 }
 
+function initGoogle(loc) {
+    var GoogleMapsAPI = require('googlemaps');
+    var publicConfig = {key: 'AIzaSyBOi5Nu5k9NCoyNLv2wjK-TvlDYu_33vc8'};
+    var gmAPI = new GoogleMapsAPI(publicConfig);
+    return gmAPI;
+}
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('index', { title: 'NomNom' });
@@ -50,29 +52,34 @@ router.get('/', function(req, res, next) {
 router.post('/',function(req,res, next) {
     var term = req.body.term;
     var loc = req.body.location;
-    var locyelp = loc;
     var yelp = initYelp();
-    var factual = initFactual();
     var parameters = {};
     parameters['title'] = "NomNom";
     parameters['location'] = loc;
     parameters['term'] = term;
-    yelp.search({term: term, location: locyelp, sort: '1', radius_filter: '1610'})
-        .then(function (data) {
-            var s = JSON.stringify(data);
-            var obj = JSON.parse(s);
-            var yelpRes = obj.businesses;
-            parameters['result'] = yelpRes;
-            res.render('search', parameters);
-            //for (var i = 0; i< yelpRes.length; i++) {
-                //var factRes = getFactual(yelpRes[i].location.country_code.toLowerCase(), yelpRes[i].id, factual);
-            //}
-        })
-        .catch(function (err) {
-            console.log('error_yelp');
-            parameters['result'] = "None";
-            res.render('search', parameters);
-        });
+    var geocodeParams = {"address": loc};
+    var gmAPI = initGoogle(loc);
+    gmAPI.geocode(geocodeParams, function(err, result) {
+        if (result) {
+            parameters['google'] = result.results[0].geometry.location;
+            yelp.search({term: term, location: loc, sort: '1', radius_filter: '1610'})
+                .then(function (data) {
+                    var s = JSON.stringify(data);
+                    var obj = JSON.parse(s);
+                    var yelpRes = obj.businesses;
+                    parameters['result'] = yelpRes;
+                    res.render('search', parameters);
+                    //for (var i = 0; i< yelpRes.length; i++) {
+                    //var factRes = getFactual(yelpRes[i].location.country_code.toLowerCase(), yelpRes[i].id);
+                    //}
+                })
+                .catch(function (err) {
+                    console.log('error_yelp');
+                    parameters['result'] = "None";
+                    res.render('search', parameters);
+                });
+        }
+    });
 });
 
 module.exports = router;
