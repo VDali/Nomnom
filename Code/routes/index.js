@@ -50,17 +50,18 @@ router.get('/', function(req, res, next) {
 router.post('/',function(req,res, next) {
     var term = req.body.term;
     var loc = req.body.location;
+    var locyelp = loc;
     var yelp = initYelp();
     var factual = initFactual();
     var parameters = {};
     parameters['title'] = "NomNom";
     parameters['location'] = loc;
     parameters['term'] = term;
-    yelp.search({term: term, location: loc, sort: '1', radius_filter: '1610'})
+    yelp.search({term: term, location: locyelp, sort: '1', radius_filter: '1610'})
         .then(function (data) {
             var s = JSON.stringify(data);
             var obj = JSON.parse(s);
-            var yelpRes = obj.businesses
+            var yelpRes = obj.businesses;
             parameters['result'] = yelpRes;
             res.render('search', parameters);
             //for (var i = 0; i< yelpRes.length; i++) {
