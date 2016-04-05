@@ -76,6 +76,7 @@ router.post('/',function(req,res, next) {
                     var obj = JSON.parse(s);
                     var yelpRes = obj.businesses;
                     parameters['result'] = yelpRes;
+                    // mongoose.model('rest', {term: String, loc: String});
                     res.render('search', parameters);
                 })
                 .catch(function (err) {

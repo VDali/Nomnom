@@ -59,10 +59,10 @@ if (result !== 'None')
                                         - var start = location.split(' ').join('+');
                                         - var link = "https://www.google.com/maps/dir/"+start+"/"+s;
                                         if (r.location.address != "")
-                                            if (addr.length <= 38)
+                                            if (addr.length <= 36)
                                                 a(href= link) #{addr}
                                             else
-                                                a(href= link, alt= addr) #{addr.substring(0,35) + "..."}
+                                                a(href= link, alt= addr) #{addr.substring(0,33) + "..."}
                                         else
                                             | Food Truck
                                 p
