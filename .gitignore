@@ -1,0 +1,6 @@
+# Directories #
+.idea
+
+*.xml
+
+Code/.idea/workspace.xml
