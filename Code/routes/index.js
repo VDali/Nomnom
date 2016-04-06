@@ -1,6 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var router = express.Router();
+var database = require('../config/database');
+var Restaurant = require('../models/restaurants');
 
 function initYelp() {
     var Yelp = require('yelp');
@@ -54,12 +56,15 @@ router.post('/',function(req,res, next) {
     var loc = req.body.location;
     var yelp = initYelp();
     var parameters = {};
+    //see if request is already in db
+    //var found = Restaurant.find({term: term}, {location: loc});
+    //console.log(found);
     parameters['title'] = "NomNom";
     parameters['location'] = loc;
     parameters['term'] = term;
     var geocodeParams = {"address": loc};
     var gmAPI = initGoogle(loc);
-    gmAPI.geocode(geocodeParams, function(err, result) {
+    gmAPI.geocode(geocodeParams, function (err, result) {
         if (result) {
             parameters['google'] = result.results[0].geometry.location;
             yelp.search({term: term, location: loc, sort: '1', radius_filter: '1610'})
@@ -67,11 +72,23 @@ router.post('/',function(req,res, next) {
                     var s = JSON.stringify(data);
                     var obj = JSON.parse(s);
                     var yelpRes = obj.businesses;
+                    var restaurant = new Restaurant();
                     parameters['result'] = yelpRes;
                     res.render('search', parameters);
-                    //for (var i = 0; i< yelpRes.length; i++) {
-                    //var factRes = getFactual(yelpRes[i].location.country_code.toLowerCase(), yelpRes[i].id);
-                    //}
+
+                    restaurant.term = term;
+                    restaurant.location = loc;
+                    restaurant.data = s;
+
+                    restaurant.save(function (err) {
+                        if (err) {
+                            throw err;
+                        } else {
+                            console.log('saved')
+                        }
+                    });
+
+
                 })
                 .catch(function (err) {
                     console.log('error_yelp');
@@ -80,6 +97,7 @@ router.post('/',function(req,res, next) {
                 });
         }
     });
+
 });
 
 module.exports = router;
