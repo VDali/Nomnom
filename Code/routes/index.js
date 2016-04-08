@@ -1,6 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var router = express.Router();
+var database = require('../config/database');
+var Restaurant = require('../models/restaurants');
 
 function initYelp() {
     var Yelp = require('yelp');
@@ -59,12 +61,22 @@ router.post('/',function(req,res, next) {
     var loc = req.body.location;
     var yelp = initYelp();
     var parameters = {};
+
+    //See if request is already in db
+    //todo return results from db rather than hitting API
+    Restaurant.find({term: term, location: loc}, function (err, result) {
+        if (result.length > 0) {
+            console.log('found ' + term + " in db");
+        }
+    });
+
+
     parameters['title'] = "NomNom";
     parameters['location'] = loc;
     parameters['term'] = term;
     var geocodeParams = {"address": loc};
     var gmAPI = initGoogle(loc);
-    gmAPI.geocode(geocodeParams, function(err, result) {
+    gmAPI.geocode(geocodeParams, function (err, result) {
         if (result) {
             parameters['google'] = result.results[0].geometry.location;
             var lat = result.results[0].geometry.location.lat;
@@ -75,9 +87,27 @@ router.post('/',function(req,res, next) {
                     var s = JSON.stringify(data);
                     var obj = JSON.parse(s);
                     var yelpRes = obj.businesses;
+                    var restaurant = new Restaurant();
                     parameters['result'] = yelpRes;
                     // mongoose.model('rest', {term: String, loc: String});
                     res.render('search', parameters);
+<<<<<<< HEAD
+
+                    restaurant.term = term;
+                    restaurant.location = loc;
+                    restaurant.data = s;
+
+                    restaurant.save(function (err) {
+                        if (err) {
+                            throw err;
+                        } else {
+                            console.log('saved')
+                        }
+                    });
+
+
+=======
+>>>>>>> master
                 })
                 .catch(function (err) {
                     console.log('error_yelp');
@@ -100,6 +130,7 @@ router.post('/',function(req,res, next) {
                 });
         }
     });
+
 });
 
 module.exports = router;
