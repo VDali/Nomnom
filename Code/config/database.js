@@ -11,4 +11,8 @@ mongoose.connection.on('open', function () {
 mongoose.connection.on('error', function (err) {
     console.log('Could not connect to mongo server!');
     console.log(err);
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> master

@@ -3,6 +3,7 @@ br
 if (result !== 'None')
     if (result.length > 0)
         h2(align="center", class="page-header") #{"Closest \'"+term+"\' near " +location}
+        hr
         script(src='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.js')
         link(href='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.css' rel='stylesheet')
         style.
@@ -30,7 +31,7 @@ if (result !== 'None')
                             }).addTo(mapLeaflet);
                             marker.bindPopup("<b>Starter Location</b>");
                         }
-        br
+        hr
         - var index = 1;
         div(class="container-fluid")
             each r in result
@@ -38,7 +39,10 @@ if (result !== 'None')
                     div(class ="col-md-5 col-sm-8 well", id=r.id, style ="margin: 7px; left:7%")
                         div(class="media")
                             div(class="media-left media-middle")
-                                img(src= r.image_url, class="img-rounded media-object", height="80", width="80")
+                                - if (r.image_url != undefined)
+                                    img(src= r.image_url, class="img-rounded media-object", height="80", width="80")
+                                - else
+                                    img(src= '../images/Noimage.jpg', class="img-rounded media-object", height="80", width="80")
                             div(class="media-body media-left")
                                 h4(class="media-heading")
                                     b
@@ -55,14 +59,14 @@ if (result !== 'None')
                                         - var start = location.split(' ').join('+');
                                         - var link = "https://www.google.com/maps/dir/"+start+"/"+s;
                                         if (r.location.address != "")
-                                            if (addr.length <= 38)
+                                            if (addr.length <= 36)
                                                 a(href= link) #{addr}
                                             else
-                                                a(href= link, alt= addr) #{addr.substring(0,35) + "..."}
+                                                a(href= link, alt= addr) #{addr.substring(0,33) + "..."}
                                         else
                                             | Food Truck
                                 p
-                                    img(src=r.rating_img_url_large, alt=r.name+" Rating", height="20", width="100")
+                                    img(src='../images/Rating/'+r.rating+'.png', alt=r.name+" Rating", height="25", width="125")
                                     | #{" "}
                                     a(href="http://www.yelp.com/biz/"+r.id) #{r.review_count + " Yelp reviews"}
                                     br
@@ -105,6 +109,7 @@ if (result !== 'None')
                                     }
                                     place.bindPopup(popup);
                     - index++
+        include ../public/footer.html
     else
         h2(align="center", class="page-header") #{"Could not find \'" + term + "\' near " + location}
 else

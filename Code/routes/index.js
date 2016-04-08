@@ -15,7 +15,12 @@ function initYelp() {
     return yelp;
 }
 
-function getFactual(id, country, factual) {
+function initFactual() {
+    var Factual = require('factual-api');
+    var factual = new Factual('LSCM3IwVY4QaENnrM4tIsHXQodwp3ROQaJ0zADjX', 'Rcw2Z89qHfZBmKYQjEuBoyvHsAUKtk0ZvvayjDqT');
+    return factual;
+}
+function getFactual(id, country) {
     var Factual = require('factual-api');
     var factual = new Factual('LSCM3IwVY4QaENnrM4tIsHXQodwp3ROQaJ0zADjX', 'Rcw2Z89qHfZBmKYQjEuBoyvHsAUKtk0ZvvayjDqT');
     if (country === "us" || country === "fr" || country === "gb" || country === "de" || country === "au") {
@@ -74,14 +79,19 @@ router.post('/',function(req,res, next) {
     gmAPI.geocode(geocodeParams, function (err, result) {
         if (result) {
             parameters['google'] = result.results[0].geometry.location;
-            yelp.search({term: term, location: loc, sort: '1', radius_filter: '1610'})
+            var lat = result.results[0].geometry.location.lat;
+            var lng = result.results[0].geometry.location.lng;
+            var coor = lat +','+lng
+            yelp.search({term: term, ll: coor, sort: '1', radius_filter: '1610'})
                 .then(function (data) {
                     var s = JSON.stringify(data);
                     var obj = JSON.parse(s);
                     var yelpRes = obj.businesses;
                     var restaurant = new Restaurant();
                     parameters['result'] = yelpRes;
+                    // mongoose.model('rest', {term: String, loc: String});
                     res.render('search', parameters);
+<<<<<<< HEAD
 
                     restaurant.term = term;
                     restaurant.location = loc;
@@ -96,9 +106,25 @@ router.post('/',function(req,res, next) {
                     });
 
 
+=======
+>>>>>>> master
                 })
                 .catch(function (err) {
                     console.log('error_yelp');
+                    parameters['result'] = "None";
+                    res.render('search', parameters);
+                });
+        } else {
+            yelp.search({term: term, location: loc, sort: '1', radius_filter: '1610'})
+                .then(function (data) {
+                    var s = JSON.stringify(data);
+                    var obj = JSON.parse(s);
+                    var yelpRes = obj.businesses;
+                    parameters['result'] = yelpRes;
+                    res.render('search', parameters);
+                })
+                .catch(function (err) {
+                    console.log('error_yelp_no_google');
                     parameters['result'] = "None";
                     res.render('search', parameters);
                 });
