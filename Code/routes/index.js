@@ -56,9 +56,16 @@ router.post('/',function(req,res, next) {
     var loc = req.body.location;
     var yelp = initYelp();
     var parameters = {};
-    //see if request is already in db
-    //var found = Restaurant.find({term: term}, {location: loc});
-    //console.log(found);
+
+    //See if request is already in db
+    //todo return results from db rather than hitting API
+    Restaurant.find({term: term, location: loc}, function (err, result) {
+        if (result.length > 0) {
+            console.log('found ' + term + " in db");
+        }
+    });
+
+
     parameters['title'] = "NomNom";
     parameters['location'] = loc;
     parameters['term'] = term;
