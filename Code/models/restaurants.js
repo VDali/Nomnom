@@ -10,4 +10,4 @@ var restSchema = new Schema({
     data : String
 });
 
-mongoose.model('restaurant', restSchema);
+module.exports = mongoose.model('restaurant', restSchema);

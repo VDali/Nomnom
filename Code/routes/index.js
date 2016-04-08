@@ -1,6 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var router = express.Router();
+var database = require('../config/database');
+var Restaurant = require('../models/restaurants');
 
 function initYelp() {
     var Yelp = require('yelp');
@@ -75,9 +77,23 @@ router.post('/',function(req,res, next) {
                     var s = JSON.stringify(data);
                     var obj = JSON.parse(s);
                     var yelpRes = obj.businesses;
+                    var restaurant = new Restaurant();
                     parameters['result'] = yelpRes;
                     // mongoose.model('rest', {term: String, loc: String});
                     res.render('search', parameters);
+
+                    restaurant.term = term;
+                    restaurant.location = loc;
+                    restaurant.data = s;
+
+                    restaurant.save(function (err) {
+                        if (err) {
+                            throw err;
+                        } else {
+                            console.log('saved')
+                        }
+                    });
+
                 })
                 .catch(function (err) {
                     console.log('error_yelp');
@@ -92,6 +108,7 @@ router.post('/',function(req,res, next) {
                     var yelpRes = obj.businesses;
                     parameters['result'] = yelpRes;
                     res.render('search', parameters);
+
                 })
                 .catch(function (err) {
                     console.log('error_yelp_no_google');
