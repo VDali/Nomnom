@@ -63,12 +63,11 @@ router.post('/',function(req,res, next) {
     var parameters = {};
 
     //See if request is already in db
-    //todo return results from db rather than hitting API
-    Restaurant.find({term: term, location: loc}, function (err, result) {
-        if (result.length > 0) {
-            console.log('found ' + term + " in db");
-        }
-    });
+   // Restaurant.find({term: term, location: loc}, function (err, result) {
+   //     if (result.length > 0) {
+   //         console.log('found ' + term + " in db");
+   //     }
+   // });
 
 
     parameters['title'] = "NomNom";
@@ -87,12 +86,10 @@ router.post('/',function(req,res, next) {
                     var s = JSON.stringify(data);
                     var obj = JSON.parse(s);
                     var yelpRes = obj.businesses;
-                    var restaurant = new Restaurant();
                     parameters['result'] = yelpRes;
-                    // mongoose.model('rest', {term: String, loc: String});
                     res.render('search', parameters);
-<<<<<<< HEAD
 
+                    var restaurant = new Restaurant();
                     restaurant.term = term;
                     restaurant.location = loc;
                     restaurant.data = s;
@@ -106,8 +103,7 @@ router.post('/',function(req,res, next) {
                     });
 
 
-=======
->>>>>>> master
+
                 })
                 .catch(function (err) {
                     console.log('error_yelp');
