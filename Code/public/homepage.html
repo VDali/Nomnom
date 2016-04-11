@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <meta name="description" content="NomNom">
+    <title>NomNom</title>
+</head>
+<body background = "../images/avocado.jpg">
+
+
+<!-- necessary for the search function -->
+<!Booststrap>
+<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/flatly/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href='/stylesheets/style.css' rel='stylesheet'>
+
+<!Bootstrap JQuery>
+<link src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
+
+<!Angular>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js"></script>
+
+<!Google Autocomplete>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+
+<! JQuery>
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script rel='stylesheet' src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+<form class="form-inline home-center" role="search" method='post' action="/">
+    <div class = "home-center">
+        <div class="form-group ">
+            <input type='text' id="term" name='term' placeholder ="Find..." class="form-control" style="height: 40px;">
+        </div>
+        <div class="form-group">
+            <input type='text' id = "location" name='location' placeholder ="Near..." class="form-control" style="height: 40px;">
+            <script>
+                var input = document.getElementById('location');
+                var autocomplete = new google.maps.places.Autocomplete(input);
+            </script>
+        </div>
+        <button class="btn btn-warning" type='submit' style="height: 40px;">
+            <span class="glyphicon glyphicon-search"></span>
+        </button>
+    </div>
+</form>
+
+
+</body>
+</html>
