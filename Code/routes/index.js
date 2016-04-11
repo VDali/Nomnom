@@ -64,8 +64,7 @@ router.post('/',function(req,res, next) {
             console.log('found ' + term + " in db");
         }
     });
-
-
+    
     parameters['title'] = "NomNom";
     parameters['location'] = loc;
     parameters['term'] = term;
