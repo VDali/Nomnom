@@ -67,7 +67,7 @@ router.post('/',function(req,res, next) {
 
     //to see if request is already in the database (find is a way of querying)
     Restaurant.find({term: term, location: loc}, function (err, result) {
-        usedb = result;
+        //usedb = result;
         if (result.length > 0) {
             console.log('found ' + term + " in db");
         }
@@ -79,13 +79,13 @@ router.post('/',function(req,res, next) {
     var geocodeParams = {"address": loc};
     var gmAPI = initGoogle(loc);
     gmAPI.geocode(geocodeParams, function(err, result) {
-       // if (usedb.length == 0) {
+      // if (usedb.length == 0) {
 
             if (result) {
                 parameters['google'] = result.results[0].geometry.location;
                 var lat = result.results[0].geometry.location.lat;
                 var lng = result.results[0].geometry.location.lng;
-                var coor = lat + ',' + lng
+                var coor = lat + ',' + lng;
                 yelp.search({term: term, ll: coor, sort: '1', radius_filter: '1610'})
                     .then(function (data) {
                         var s = JSON.stringify(data);
@@ -130,16 +130,16 @@ router.post('/',function(req,res, next) {
                         res.render('search', parameters);
                     });
             }
-        // } else {
-        //     s = usedb[0].data;
-        //     var obj = JSON.parse(s);
-        //     var yelpRes = obj.businesses;
-        //
-        //     console.log('printing from database')
-        //
-        //     parameters['result'] = yelpRes;
-        //     res.render('search', parameters);
-        // }
+        /* } else {
+             s = usedb[0].data;
+             var obj = JSON.parse(s);
+             var yelpRes = obj.businesses;
+
+             console.log('printing from database')
+
+             parameters['result'] = yelpRes;
+             res.render('search', parameters);
+         }*/
     });
 });
 
