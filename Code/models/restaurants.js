@@ -5,9 +5,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var restSchema = new Schema({
-    name: String,
+    term: String,
     location: String,
     data : String
 });
 
-mongoose.model('restaurant', restSchema);
+module.exports = mongoose.model('restaurant', restSchema); //don't forget to export
