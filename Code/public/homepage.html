@@ -8,18 +8,16 @@
     <title>NomNom</title>
 
     <style>
+        .form-inline {
+            position: absolute;
+            left:50%;
+            top: 50%;
+        }
+
         .btn {
             background-color: #8ec14e;
             position: relative;
         }
-
-        .search-form-bar {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            height: 40px;
-        }
-
     </style>
 
     <!-- necessary for the search function -->
@@ -41,25 +39,23 @@
     <script rel='stylesheet' src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 
 </head>
-<body background = "../images/avocado.jpg">
+<body background = "../images/background.jpg">
 
-<form class="form-inline" role="search" method='post' action="/">
-    <div class="form-term">
-        <input type='text' id="term" name='term' placeholder ="Find..." class="form-control">
-    </div>
-    <div class="form-loc">
-        <input type='text' id = "location" name='location' placeholder ="Near..." class="form-control">
-        <script>
-            var input = document.getElementById('location');
-            var autocomplete = new google.maps.places.Autocomplete(input);
-        </script>
-    </div>
-    <button class="btn" type='submit'>
-        <span class="glyphicon glyphicon-search"></span>
-    </button>
-
-</form>
-
-
+    <form class="form-inline" role="search" method='post' action="/">
+            <div class="form-group ">
+                <input type='text' id="term" name='term' placeholder ="Find..." class="form-control" style="height: 40px;">
+            </div>
+            <div class="form-group">
+                <input type='text' id = "location" name='location' placeholder ="Near..." class="form-control" style="height: 40px;">
+                <script>
+                    var input = document.getElementById('location');
+                    var autocomplete = new google.maps.places.Autocomplete(input);
+                </script>
+            </div>
+            <button class="btn" type='submit' style="height: 40px;">
+                <span class="glyphicon glyphicon-search"></span>
+            </button>
+    </form>
 </body>
+
 </html>
