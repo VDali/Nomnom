@@ -1,3 +1,34 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div id="fb-root"></div>
+<script src="fblogin.js"></script>
+
+<!--
+  Below we include the Login Button social plugin. This button uses
+  the JavaScript SDK to present a graphical Login button that triggers
+  the FB.login() function when clicked.
+-->
+
+<script>console.log('Welcome!  Fetching your information.... ');</script>
+
+<button type="button" onclick="testAPI()">Try it</button>
+
+<div href="/auth/facebook" class="fb-login-button" data-size="xlarge" data-auto-logout-link="true" onlogin="testAPI()">
+</div>
+
+<a href="/auth/facebook">Login with Facebook</a>
+
+<form action="/auth/facebook">
+    <input type="image" src="fb.psd">
+</form>
+
+<div id="status">
+</div>
+
+</body>
+</html>
+
 
     <meta charset="UTF-8">
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
