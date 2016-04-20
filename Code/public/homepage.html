@@ -11,13 +11,13 @@
         .form-inline {
             position: absolute;
             left: 30%;
-            top: 65%;
+            top: 60%;
         }
 
-        .NomNom {
+        .eat {
             position: absolute;
-            left: 30.5%;
-            top: 30%;
+            left: 43%;
+            top: 40%;
         }
 
     </style>
@@ -41,17 +41,16 @@
     <script rel='stylesheet' src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 
 </head>
-<body background="../images/food6.jpg">
-
-<div>
 
 
-</div>
+<body background="../images/avocado2.jpg">
 
 <div class="container">
+
     <form class="form-inline" role="search" method='post' action="/">
         <div class="form-group ">
-            <input type='text' id="term" name='term' placeholder="Find..." class="form-control" style="height: 40px;">
+            <input type='text' id="term" name='term' placeholder="Find..." class="form-control"
+                   style="height: 40px;">
         </div>
         <div class="form-group">
             <input type='text' id="location" name='location' placeholder="Near..." class="form-control"
@@ -65,23 +64,33 @@
             <span class="glyphicon glyphicon-search"></span>
         </button>
     </form>
+
+    <div class="eat" style="size: 100">
+        <h1>
+            Let's Eat
+        </h1>
+    </div>
 </div>
 
-<div class="in-line pull-right">
-    <button type="button" class="btn btn-default navbar-btn" style="background-color: transparent; border: none">
-        Sign Up
-    </button>
-    <button type="button" class="btn btn-default navbar-btn" style="background-color: transparent; border: none">
-        Log In
-    </button>
+<nav class="navbar navbar-default" style="height: 100px; background:none">
+    <div class="in-line pull-right">
+        <button type="button" class="btn btn-default navbar-btn"
+                style="background-color: transparent; border: none">
+            Sign Up
+        </button>
+        <button type="button" class="btn btn-default navbar-btn"
+                style="background-color: transparent; border: none">
+            Log In
+        </button>
+    </div>
 
-</div>
+    <div class="NomNom">
+        <h3 style="color: #ffffff">
+            NomNom
+        </h3>
+    </div>
 
-<div class="NomNom">
-   <h1 style="color: #ffffff; font-size: 115px">
-       NomNom
-   </h1>
-</div>
+</nav>
 
 </body>
 
