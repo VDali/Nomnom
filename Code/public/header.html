@@ -14,8 +14,14 @@
 
 <button type="button" onclick="testAPI()">Try it</button>
 
-<div class="fb-login-button" data-size="xlarge" data-auto-logout-link="true" onlogin="testAPI()">
+<div href="/auth/facebook" class="fb-login-button" data-size="xlarge" data-auto-logout-link="true" onlogin="testAPI()">
 </div>
+
+<a href="/auth/facebook">Login with Facebook</a>
+
+<form action="/auth/facebook">
+    <input type="image" src="fb.psd">
+</form>
 
 <div id="status">
 </div>

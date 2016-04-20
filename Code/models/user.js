@@ -1,13 +1,13 @@
-/**
- * Created by veenadali on 4/11/16.
- */
+var express = require('express');
+var router = express.Router();
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-
-var restSchema = new Schema({
-    name: String,
-    id: String,
-    password: String
+var userSchema = mongoose.Schema({
+    facebook: {
+        id: String,
+        token: String,
+        email: String,
+        name: String
+    }
 });
 
-module.exports = mongoose.model('user', restSchema); //don't forget to export
+module.exports = mongoose.model('User', userSchema);
