@@ -10,13 +10,8 @@
     <style>
         .form-inline {
             position: absolute;
-            left:50%;
-            top: 50%;
-        }
-
-        .btn {
-            background-color: #8ec14e;
-            position: relative;
+            left: 30%;
+            top: 65%;
         }
     </style>
 
@@ -39,23 +34,43 @@
     <script rel='stylesheet' src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 
 </head>
-<body background = "../images/background.jpg">
+<body background="../images/avocado2.jpg">
 
+<div>
+
+
+</div>
+
+<div class="container">
     <form class="form-inline" role="search" method='post' action="/">
-            <div class="form-group ">
-                <input type='text' id="term" name='term' placeholder ="Find..." class="form-control" style="height: 40px;">
-            </div>
-            <div class="form-group">
-                <input type='text' id = "location" name='location' placeholder ="Near..." class="form-control" style="height: 40px;">
-                <script>
-                    var input = document.getElementById('location');
-                    var autocomplete = new google.maps.places.Autocomplete(input);
-                </script>
-            </div>
-            <button class="btn" type='submit' style="height: 40px;">
-                <span class="glyphicon glyphicon-search"></span>
-            </button>
+        <div class="form-group ">
+            <input type='text' id="term" name='term' placeholder="Find..." class="form-control" style="height: 40px;">
+        </div>
+        <div class="form-group">
+            <input type='text' id="location" name='location' placeholder="Near..." class="form-control"
+                   style="height: 40px;">
+            <script>
+                var input = document.getElementById('location');
+                var autocomplete = new google.maps.places.Autocomplete(input);
+            </script>
+        </div>
+        <button class="btn" type='submit' style="height: 40px; background: #8ec14e;">
+            <span class="glyphicon glyphicon-search"></span>
+        </button>
     </form>
+</div>
+
+<div class="in-line pull-right">
+    <button type="button" class="btn btn-default navbar-btn" style="background-color: transparent; border: none">
+        Sign Up
+    </button>
+    <button type="button" class="btn btn-default navbar-btn" style="background-color: transparent; border: none">
+        Log In
+    </button>
+
+</div>
+
+
 </body>
 
 </html>
