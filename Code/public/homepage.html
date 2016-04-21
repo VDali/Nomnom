@@ -74,14 +74,21 @@
 
 <nav class="navbar navbar-default" style="height: 80px; background:none">
     <div class="in-line pull-right">
-        <button type="button" class="btn btn-default navbar-btn"
+            <a class="navbar-link" href="/auth/facebook">
+                <div type="button" class="btn btn-default navbar-btn" data-auto-logout-link="true" onlogin="testAPI()" style="background-color: transparent; border: none">
+                    Sign Up
+                </div>
+            </a>
+
+
+       <!-- <button type="button" class="btn btn-default navbar-btn"
                 style="background-color: transparent; border: none">
             Sign Up
         </button>
         <button type="button" class="btn btn-default navbar-btn"
                 style="background-color: transparent; border: none">
             Log In
-        </button>
+        </button>-->
     </div>
 
     <div class="NomNom">

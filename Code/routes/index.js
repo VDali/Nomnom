@@ -135,7 +135,6 @@ router.post('/',function(req,res, next) {
             parameters['google'] = result.results[0].geometry.location;
             var lat = result.results[0].geometry.location.lat;
             var lng = result.results[0].geometry.location.lng;
-            var coor = lat + ',' + lng;
             var s = usedb.data;
             //console.log(usedb);
             var obj = JSON.parse(s);
