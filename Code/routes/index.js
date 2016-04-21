@@ -69,8 +69,10 @@ router.post('/',function(req,res, next) {
     Restaurant.findOne({term: term, location: loc}, function (err, result) {
         //console.log(result.data);
         usedb = result;
-        if (result.length > 0) {
-            console.log('found ' + term + " in db");
+        if (result) {
+            if (result.length > 0) {
+                console.log('found ' + term + " in db");
+            }
         }
     });
 
@@ -93,7 +95,6 @@ router.post('/',function(req,res, next) {
                         var yelpRes = obj.businesses;
                         var restaurant = new Restaurant();
                         parameters['result'] = yelpRes;
-                        // mongoose.model('rest', {term: String, loc: String});
                         res.render('search', parameters);
 
                         restaurant.term = term;
@@ -147,5 +148,6 @@ router.post('/',function(req,res, next) {
         }
     });
 });
+
 
 module.exports = router;

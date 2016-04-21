@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div id="fb-root"></div>
+<script src="fblogin.js"></script>
+
+<script>console.log('Welcome!  Fetching your information.... ');</script>
+
+</body>
+</html>
+
 
     <meta charset="UTF-8">
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
@@ -34,7 +45,6 @@
                 <img src="../images/NomNom2.png" style="position: relative;width:60px;height:60px;top: -20px;"></img>
             </a>
         </div>
-
         <form class="form-inline navbar-left" role="search" method='post' action="/">
             <div class = "navbar-form navbar-left">
                 <div class="form-group ">
@@ -54,8 +64,11 @@
         </form>
         <ul class ="nav navbar-nav navbar-right">
             <li class ="nav-item">
-                <a class="navbar-link" href='#'>
-                    <span class="glyphicon glyphicon-user"></span>
+                <div id="status" style="position: relative; top: 24px;"></div>
+            </li>
+            <li class ="nav-item">
+                <a class="navbar-link" href="/auth/facebook">
+                    <div class="fb-login-button" data-auto-logout-link="true" onlogin="testAPI()" style="width:60px;height:60px;top: 0px;"></div>
                 </a>
             </li>
             <li class ="nav-item">
