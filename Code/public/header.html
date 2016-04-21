@@ -4,27 +4,7 @@
 <div id="fb-root"></div>
 <script src="fblogin.js"></script>
 
-<!--
-  Below we include the Login Button social plugin. This button uses
-  the JavaScript SDK to present a graphical Login button that triggers
-  the FB.login() function when clicked.
--->
-
 <script>console.log('Welcome!  Fetching your information.... ');</script>
-
-<button type="button" onclick="testAPI()">Try it</button>
-
-<div href="/auth/facebook" class="fb-login-button" data-size="xlarge" data-auto-logout-link="true" onlogin="testAPI()">
-</div>
-
-<a href="/auth/facebook">Login with Facebook</a>
-
-<form action="/auth/facebook">
-    <input type="image" src="fb.psd">
-</form>
-
-<div id="status">
-</div>
 
 </body>
 </html>
@@ -65,7 +45,6 @@
                 <img src="../images/NomNom2.jpg" style="position: relative;width:60px;height:60px;top: -20px;"></img>
             </a>
         </div>
-
         <form class="form-inline navbar-left" role="search" method='post' action="/">
             <div class = "navbar-form navbar-left">
                 <div class="form-group ">
@@ -85,8 +64,11 @@
         </form>
         <ul class ="nav navbar-nav navbar-right">
             <li class ="nav-item">
-                <a class="navbar-link" href='#'>
-                    <span class="glyphicon glyphicon-user"></span>
+                <div id="status" style="position: relative; top: 24px;"></div>
+            </li>
+            <li class ="nav-item">
+                <a class="navbar-link" href="/auth/facebook">
+                    <div class="fb-login-button" data-auto-logout-link="true" onlogin="testAPI()" style="width:60px;height:60px;top: 0px;"></div>
                 </a>
             </li>
             <li class ="nav-item">
