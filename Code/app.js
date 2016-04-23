@@ -16,7 +16,7 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 //mongoose.connect('mongodb://localhost/nomnom');
 
 var routes = require('./routes/index');
-var User = require('./routes/user');
+var User = require('./models/user');
 
 var app = express();
 
@@ -65,7 +65,7 @@ app.use('/', routes);
 //app.use('/users', users);
 //app.use(express.static('public'));
 //app.get('/', routes.index);
-app.get('/', ensureAuthenticated, function(req, res){
+app.get('/account', ensureAuthenticated, function(req, res){
   User.findById(req.session.passport.user, function(err, user) {
     if(err) {
       console.log(err);  // handle errors
@@ -81,7 +81,7 @@ app.get('/auth/facebook',
 app.get('/auth/facebook/callback',
     passport.authenticate('facebook', { failureRedirect: '/' }),
     function(req, res) {
-      res.redirect('/account');
+      res.redirect('/profile');
     });
 
 app.get('/logout', function(req, res){
