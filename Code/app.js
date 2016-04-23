@@ -62,12 +62,12 @@ app.use('/users', User);
 // routes
 //app.get('/', routes);
 //app.get('/ping', routes);
-app.get('/account', ensureAuthenticated, function(req, res){
+app.get('/profile', ensureAuthenticated, function(req, res){
   User.findById(req.session.passport.user, function(err, user) {
     if(err) {
       console.log(err);  // handle errors
     } else {
-      res.render('account', { user: user});
+      res.render('profile', { user: user});
     }
   });
 });
@@ -78,7 +78,7 @@ app.get('/auth/facebook',
 app.get('/auth/facebook/callback',
     passport.authenticate('facebook', { failureRedirect: '/' }),
     function(req, res) {
-      res.redirect('/account');
+      res.redirect('/profile');
     });
 
 app.get('/logout', function(req, res){
