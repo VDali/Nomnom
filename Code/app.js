@@ -16,7 +16,7 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 //mongoose.connect('mongodb://localhost/nomnom');
 
 var routes = require('./routes/index');
-var User = require('./routes/user');
+var User = require('./models/user');
 
 var session = require('express-session');
 
