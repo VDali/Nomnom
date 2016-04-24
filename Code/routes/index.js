@@ -64,12 +64,14 @@ router.post('/',function(req,res, next) {
     var yelp = initYelp();
     var parameters = {};
     var usedb;
+    var found = 0;
 
-    //to see if request is already in the database (find is a way of querying)
+    //to see if request is already in the database
     Restaurant.findOne({term: term, location: loc}, function (err, result) {
-        //console.log(result.data);
-        usedb = result;
         if (result) {
+            //console.log(result.data);
+            usedb = result;
+            found = 1;
             if (result.length > 0) {
                 console.log('found ' + term + " in db");
             }
@@ -82,12 +84,13 @@ router.post('/',function(req,res, next) {
     var geocodeParams = {"address": loc};
     var gmAPI = initGoogle(loc);
     gmAPI.geocode(geocodeParams, function(err, result) {
-        if (usedb.length == 0) {
-            if (result) {
-                parameters['google'] = result.results[0].geometry.location;
-                var lat = result.results[0].geometry.location.lat;
-                var lng = result.results[0].geometry.location.lng;
-                var coor = lat + ',' + lng;
+        if (result) {
+            parameters['google'] = result.results[0].geometry.location;
+            var lat = result.results[0].geometry.location.lat;
+            var lng = result.results[0].geometry.location.lng;
+            var coor = lat + ',' + lng;
+
+            if (found == 0) {
                 yelp.search({term: term, ll: coor, sort: '1', radius_filter: '1610'})
                     .then(function (data) {
                         var s = JSON.stringify(data);
@@ -100,6 +103,7 @@ router.post('/',function(req,res, next) {
                         restaurant.term = term;
                         restaurant.location = loc;
                         restaurant.data = s;
+                        //restaurant.geoCode = parameters['google'];
 
                         restaurant.save(function (err) {
                             if (err) {
@@ -116,6 +120,20 @@ router.post('/',function(req,res, next) {
                         res.render('search', parameters);
                     });
             } else {
+                var s = usedb.data;
+                //console.log(usedb);
+                var obj = JSON.parse(s);
+                var yelpRes = obj.businesses;
+
+                console.log('printing from database');
+
+                parameters['result'] = yelpRes;
+                res.render('search', parameters);
+
+                found = 0;
+            }
+        } else {
+            if (found == 0) {
                 yelp.search({term: term, location: loc, sort: '1', radius_filter: '1610'})
                     .then(function (data) {
                         var s = JSON.stringify(data);
@@ -130,20 +148,19 @@ router.post('/',function(req,res, next) {
                         parameters['result'] = "None";
                         res.render('search', parameters);
                     });
+            } else {
+                var s = usedb.data;
+                //console.log(usedb);
+                var obj = JSON.parse(s);
+                var yelpRes = obj.businesses;
+
+                console.log('printing from database');
+
+                parameters['result'] = yelpRes;
+                res.render('search', parameters);
+
+                found = 0;
             }
-        } else {
-            parameters['google'] = result.results[0].geometry.location;
-            var lat = result.results[0].geometry.location.lat;
-            var lng = result.results[0].geometry.location.lng;
-            var s = usedb.data;
-            //console.log(usedb);
-            var obj = JSON.parse(s);
-            var yelpRes = obj.businesses;
-
-            console.log('printing from database');
-
-            parameters['result'] = yelpRes;
-            res.render('search', parameters);
         }
     });
 });
