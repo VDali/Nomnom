@@ -88,8 +88,7 @@ app.get('/logout', function(req, res){
 
 // test authentication
 function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { console.log('fuck this shit');return next(); }
-  console.log('fuck this shit again');
+  if (req.isAuthenticated()) { return next(); }
   res.redirect('/');
 }
 
