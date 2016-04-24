@@ -18,6 +18,8 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var routes = require('./routes/index');
 var User = require('./models/user');
 
+var session = require('express-session');
+
 var app = express();
 
 // view engine setup
@@ -30,20 +32,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
-
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  // app.use(express.logger());
-  // app.use(express.cookieParser());
-  // app.use(express.bodyParser());
-  // app.use(express.methodOverride());
-  // app.use(express.session({ secret: 'my_precious' }));
-  app.use(passport.initialize());
-  app.use(passport.session());
-  // app.use(app.router);
-  // app.use(express.static(__dirname + '/public'));
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // serialize and deserialize
@@ -59,18 +54,20 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
+app.use('/', routes);
+app.use('/users', User);
+//app.use(express.static('public'));
+
 
 // routes
-app.use('/', routes);
-//app.use('/users', users);
-//app.use(express.static('public'));
-//app.get('/', routes.index);
-app.get('/account', ensureAuthenticated, function(req, res){
+//app.get('/', routes);
+//app.get('/ping', routes);
+app.get('/profile', ensureAuthenticated, function(req, res){
   User.findById(req.session.passport.user, function(err, user) {
     if(err) {
       console.log(err);  // handle errors
     } else {
-      res.render('account', {user: user});
+      res.render('profile', { user: user});
     }
   });
 });
@@ -91,7 +88,8 @@ app.get('/logout', function(req, res){
 
 // test authentication
 function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
+  if (req.isAuthenticated()) { console.log('fuck this shit');return next(); }
+  console.log('fuck this shit again');
   res.redirect('/');
 }
 
@@ -125,8 +123,6 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-
 
 
 module.exports = app;
