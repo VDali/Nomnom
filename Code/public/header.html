@@ -1,13 +1,16 @@
-
-
-
 <meta charset="UTF-8">
 <meta http-equiv='X-UA-Compatible' content='IE=edge'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta name="description" content="NomNom">
 <title>NomNom</title>
 <style>
-    .pac-container{
+
+    li {
+        display: inline;
+        padding-right: 10px;
+    }
+
+    .pac-container {
         z-index: 10000;
     }
 </style>
@@ -29,20 +32,22 @@
 <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <script rel='stylesheet' src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 
-<nav class="navbar navbar-default navbar-fixed-top" style="height: 65px; background:rgba(128,128,128, 0.2)">
+<nav class="navbar navbar-default navbar-fixed-top" style="height: 60px; background:rgba(128,128,128, 0.3)">
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href='/'>
-                <img src="../images/NomNom2.png" style="position: relative;width:60px;height:60px;top: -20px;"></img>
+                <img src="../images/avocado2.png" style="position: relative;width:90px;height:60px;top: -20px;"></img>
             </a>
         </div>
         <form class="form-inline navbar-left" role="search" method='post' action="/">
-            <div class = "navbar-form navbar-left">
-                <div class="form-group ">
-                    <input type='text' id="term" name='term' placeholder ="Find..." class="form-control" style="height: 40px;">
+            <div class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type='text' id="term" name='term' placeholder="Find..." class="form-control"
+                           style="height: 40px;">
                 </div>
                 <div class="form-group">
-                    <input type='text' id = "location" name='location' placeholder ="Near..." class="form-control" style="height: 40px;">
+                    <input type='text' id="location" name='location' placeholder="Near..." class="form-control"
+                           style="height: 40px;">
                     <script>
                         var input = document.getElementById('location');
                         var autocomplete = new google.maps.places.Autocomplete(input);
@@ -53,9 +58,9 @@
                 </button>
             </div>
         </form>
-        <ul class ="nav navbar-nav navbar-right">
+        <ul class ="form-inline navbar-right">
             <li class ="nav-item">
-                <div id="status" style="position: relative; top: 24px;"></div>
+                <div id="status" style="position: relative;"></div>
             </li>
             <li class ="nav-item">
                 <a href="auth/facebook"><button type="button" class="btn btn-default navbar-btn"
