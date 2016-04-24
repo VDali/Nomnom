@@ -18,8 +18,7 @@ module.exports = passport.use(new FacebookStrategy({
       } else {
         user = new User({
           oauthID: profile.id,
-          name: profile.displayName,
-          created: Date.now()
+          name: profile.displayName
         });
         user.save(function(err) {
           if(err) {

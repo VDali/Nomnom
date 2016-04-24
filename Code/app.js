@@ -17,6 +17,7 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 
 var routes = require('./routes/index');
 var User = require('./models/user');
+var profile = require('./routes/profile');
 
 var session = require('express-session');
 
@@ -56,6 +57,7 @@ passport.deserializeUser(function(id, done) {
 
 app.use('/', routes);
 app.use('/users', User);
+//app.use('/profile', profile);
 //app.use(express.static('public'));
 
 
