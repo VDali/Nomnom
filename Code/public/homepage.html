@@ -8,17 +8,22 @@
     <title>NomNom</title>
 
     <style>
+        @import url(https://fonts.googleapis.com/css?family=Josefin+Sans);
+        *{  bgcolor="#8ec14e";
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 120%;
+        }
+
         .form-inline {
             position: absolute;
             left: 30%;
             top: 60%;
         }
 
-        .eat {
-            position: absolute;
-            left: 43%;
-            top: 40%;
+        h5 img {width:150px;
+            height:100px;
         }
+
 
     </style>
 
@@ -50,11 +55,11 @@
     <form class="form-inline" role="search" method='post' action="/">
         <div class="form-group ">
             <input type='text' id="term" name='term' placeholder="Find..." class="form-control"
-                   style="height: 40px;">
+                   style="height: 40px; width: 220px">
         </div>
         <div class="form-group">
             <input type='text' id="location" name='location' placeholder="Near..." class="form-control"
-                   style="height: 40px;">
+                   style="height: 40px; width: 220px">
             <script>
                 var input = document.getElementById('location');
                 var autocomplete = new google.maps.places.Autocomplete(input);
@@ -73,9 +78,9 @@
 </div>
 
 <nav class="navbar navbar-default" style="height: 80px; background:none">
-    <div class="in-line pull-right">
-            <a class="navbar-link" href="/auth/facebook">
-                <div type="button" class="btn btn-default navbar-btn" data-auto-logout-link="true" onlogin="testAPI()" style="background-color: transparent; border: none">
+    <div class="in-line">
+            <a class="navbar-link pull-right" href="/auth/facebook">
+                <div type="button" class="btn btn-default navbar-btn" data-auto-logout-link="true" onlogin="testAPI()" style="background-color: transparent; border: none; font-size:20px">
                     Log In
                 </div>
             </a>
@@ -89,12 +94,13 @@
                 style="background-color: transparent; border: none">
             Log In
         </button>-->
-    </div>
 
-    <div class="NomNom">
-        <h3 style="color: #ffffff">
-            NomNom
-        </h3>
+        <div id="logo">
+            <h5 href='#'><img src="images/avocado2.png"</h5>
+
+        </div>
+
+
     </div>
 
 </nav>
