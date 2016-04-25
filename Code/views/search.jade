@@ -70,10 +70,6 @@ if (result !== 'None')
                                     | #{" "}
                                     a(href="http://www.yelp.com/biz/"+r.id) #{r.review_count + " Yelp reviews"}
                                     br
-                                    span(class="glyphicon glyphicon-time")
-                                    | #{" "}
-                                    | Open Now?
-                                    | #{" | "}
                                     if (r.menu_provider != undefined)
                                         span(class="glyphicon glyphicon-cutlery")
                                         | #{" "}

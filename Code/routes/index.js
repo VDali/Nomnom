@@ -132,35 +132,6 @@ router.post('/',function(req,res, next) {
 
                 found = 0;
             }
-        } else {
-            if (found == 0) {
-                yelp.search({term: term, location: loc, sort: '1', radius_filter: '1610'})
-                    .then(function (data) {
-                        var s = JSON.stringify(data);
-                        var obj = JSON.parse(s);
-                        var yelpRes = obj.businesses;
-                        parameters['result'] = yelpRes;
-                        res.render('search', parameters);
-
-                    })
-                    .catch(function (err) {
-                        console.log('error_yelp_no_google');
-                        parameters['result'] = "None";
-                        res.render('search', parameters);
-                    });
-            } else {
-                var s = usedb.data;
-                //console.log(usedb);
-                var obj = JSON.parse(s);
-                var yelpRes = obj.businesses;
-
-                console.log('printing from database');
-
-                parameters['result'] = yelpRes;
-                res.render('search', parameters);
-
-                found = 0;
-            }
         }
     });
 });
