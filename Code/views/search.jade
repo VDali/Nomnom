@@ -70,11 +70,14 @@ if (result !== 'None')
                                     | #{" "}
                                     a(href="http://www.yelp.com/biz/"+r.id) #{r.review_count + " Yelp reviews"}
                                     br
+                                    span(class="glyphicon glyphicon-cutlery")
+                                    | #{" "}
                                     if (r.menu_provider != undefined)
-                                        span(class="glyphicon glyphicon-cutlery")
-                                        | #{" "}
                                         a(href= "http://www.yelp.com/menu/" + r.id ) Full Menu
-                                        | #{" | "}
+                                    else
+                                        | No Menu Provided
+                                    | #{" | "}
+                                    | #{"Worth It Index: "+ Math.round((r.rating*r.review_count)/index)}
                                     br
                                     - var catIndex = 0;
                                     - var catstr = "";
