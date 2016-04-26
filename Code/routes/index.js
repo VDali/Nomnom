@@ -65,7 +65,7 @@ router.post('/',function(req,res, next) {
     if (term === "") {
         term = "Food"
     }
-    var loc = req.body.location;
+    var loc = sanitizer.sanitize(req.body.location);
     var yelp = initYelp();
     var parameters = {};
     var usedb;
