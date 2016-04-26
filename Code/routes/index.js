@@ -96,7 +96,7 @@ router.post('/',function(req,res, next) {
             var coor = lat + ',' + lng;
 
             if (found == 0) {
-                yelp.search({term: term, ll: coor, sort: '1', radius_filter: '1610'})
+                yelp.search({term: term, ll: coor, sort: '1', radius_filter: '1610', category_filter: 'restaurants'})
                     .then(function (data) {
                         var s = JSON.stringify(data);
                         var obj = JSON.parse(s);
