@@ -3,6 +3,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var router = express.Router();
+var sanitizer = require('sanitizer');
 var database = require('../config/database');
 var Restaurant = require('../models/restaurants');
 
@@ -59,8 +60,12 @@ router.get('/', function(req, res, next) {
 
 // Request API access: http://www.yelp.com/developers/getting_started/api_access
 router.post('/',function(req,res, next) {
-    var term = req.body.term;
-    var loc = req.body.location;
+    var term = sanitizer.sanitize(req.body.term);
+    term = term.charAt(0).toUpperCase() + term.slice(1);
+    if (term === "") {
+        term = "Food"
+    }
+    var loc = sanitizer.sanitize(req.body.location);
     var yelp = initYelp();
     var parameters = {};
     var usedb;
@@ -91,7 +96,7 @@ router.post('/',function(req,res, next) {
             var coor = lat + ',' + lng;
 
             if (found == 0) {
-                yelp.search({term: term, ll: coor, sort: '1', radius_filter: '1610'})
+                yelp.search({term: term, ll: coor, sort: '1', radius_filter: '1610', category_filter: 'restaurants'})
                     .then(function (data) {
                         var s = JSON.stringify(data);
                         var obj = JSON.parse(s);
@@ -134,7 +139,7 @@ router.post('/',function(req,res, next) {
             }
         } else {
             if (found == 0) {
-                yelp.search({term: term, location: loc, sort: '1', radius_filter: '1610'})
+                yelp.search({term: term, location: loc, sort: '1', radius_filter: '1610', category_filter: 'food, All'})
                     .then(function (data) {
                         var s = JSON.stringify(data);
                         var obj = JSON.parse(s);

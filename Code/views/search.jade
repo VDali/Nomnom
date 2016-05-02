@@ -66,19 +66,18 @@ if (result !== 'None')
                                         else
                                             | Food Truck
                                 p
-                                    img(src='../images/Rating/'+r.rating+'.png', alt=r.name+" Rating", height="25", width="125")
+                                    img(src= r.rating_img_url_large, alt=r.name+" Rating", height="25", width="125")
                                     | #{" "}
                                     a(href="http://www.yelp.com/biz/"+r.id) #{r.review_count + " Yelp reviews"}
                                     br
-                                    span(class="glyphicon glyphicon-time")
+                                    span(class="glyphicon glyphicon-cutlery")
                                     | #{" "}
-                                    | Open Now?
-                                    | #{" | "}
                                     if (r.menu_provider != undefined)
-                                        span(class="glyphicon glyphicon-cutlery")
-                                        | #{" "}
                                         a(href= "http://www.yelp.com/menu/" + r.id ) Full Menu
-                                        | #{" | "}
+                                    else
+                                        | No Menu Provided
+                                    | #{" | "}
+                                    | #{"Worth It Index: "+ Math.round((r.rating*r.review_count)/index)}
                                     br
                                     - var catIndex = 0;
                                     - var catstr = "";
