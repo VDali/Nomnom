@@ -1,0 +1,15 @@
+@import url(https://fonts.googleapis.com/css?family=Josefin+Sans);
+*{
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #8ec14e;
+}
+
+
