@@ -7,6 +7,7 @@ var sanitizer = require('sanitizer');
 var database = require('../config/database');
 var Restaurant = require('../models/restaurants');
 
+//creates yelp object with credentials
 function initYelp() {
     var Yelp = require('yelp');
     var yelp = new Yelp({
@@ -18,11 +19,14 @@ function initYelp() {
     return yelp;
 }
 
+//creates factual object with credentials
 function initFactual() {
     var Factual = require('factual-api');
     var factual = new Factual('LSCM3IwVY4QaENnrM4tIsHXQodwp3ROQaJ0zADjX', 'Rcw2Z89qHfZBmKYQjEuBoyvHsAUKtk0ZvvayjDqT');
     return factual;
 }
+
+//Not used; calls factual based on yelp id to fill in information
 function getFactual(id, country) {
     var Factual = require('factual-api');
     var factual = new Factual('LSCM3IwVY4QaENnrM4tIsHXQodwp3ROQaJ0zADjX', 'Rcw2Z89qHfZBmKYQjEuBoyvHsAUKtk0ZvvayjDqT');
@@ -47,6 +51,7 @@ function getFactual(id, country) {
     }
 }
 
+//creates google geocode object with credentials
 function initGoogle(loc) {
     var GoogleMapsAPI = require('googlemaps');
     var publicConfig = {key: 'AIzaSyBOi5Nu5k9NCoyNLv2wjK-TvlDYu_33vc8'};
@@ -70,7 +75,7 @@ router.post('/',function(req,res, next) {
         term = "Food"
     }
     var loc = sanitizer.sanitize(req.body.location);
-    var yelp = initYelp();
+    var yelp = initYelp(); //
     var parameters = {};
     var usedb;
     var found = 0; //used to determine if request is in database or not
@@ -88,13 +93,13 @@ router.post('/',function(req,res, next) {
     });
 
     parameters['title'] = "NomNom";
-    parameters['location'] = loc;
-    parameters['term'] = term;
+    parameters['location'] = loc; //puts location in return parameters for POST
+    parameters['term'] = term; //puts term in return parameters for POST
     var geocodeParams = {"address": loc};
     var gmAPI = initGoogle(loc);
     gmAPI.geocode(geocodeParams, function(err, result) {
-        if (result) {
-            parameters['google'] = result.results[0].geometry.location;
+        if (result) { //if google result works
+            parameters['google'] = result.results[0].geometry.location; //puts google location in return parameters for POST
             var lat = result.results[0].geometry.location.lat;
             var lng = result.results[0].geometry.location.lng;
             var coor = lat + ',' + lng;
@@ -106,13 +111,12 @@ router.post('/',function(req,res, next) {
                         var obj = JSON.parse(s);
                         var yelpRes = obj.businesses;
                         var restaurant = new Restaurant();
-                        parameters['result'] = yelpRes;
+                        parameters['result'] = yelpRes; //puts yelp result in return parameters for POST
                         res.render('search', parameters);
 
                         restaurant.term = term;
                         restaurant.location = loc;
                         restaurant.data = s;
-                        //restaurant.geoCode = parameters['google'];
 
                         //saves request into restaurant database
                         restaurant.save(function (err) {
@@ -142,9 +146,9 @@ router.post('/',function(req,res, next) {
 
                 found = 0; //to prepare for next request
             }
-        } else {
+        } else { 
             if (found == 0) { //NOT in database
-                yelp.search({term: term, location: loc, sort: '1', radius_filter: '1610', category_filter: 'food, All'})
+                yelp.search({term: term, location: loc, sort: '1', radius_filter: '1610', category_filter: 'restaurants'})
                     .then(function (data) {
                         var s = JSON.stringify(data);
                         var obj = JSON.parse(s);

@@ -6,6 +6,7 @@ if (result !== 'None')
         hr
         script(src='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.js')
         link(href='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.css' rel='stylesheet')
+        // map styling
         style.
             body { margin:0; padding:0; }
             .map { position: relative; width:100%; height:400px; z-index:100;}
@@ -13,6 +14,7 @@ if (result !== 'None')
             div(class='container-fluid')
                 div(id='map-mapbox' class='map col-xs-8')
                     div(id='map-leaflet' class='map' style="align-content: center")
+                    // initialize map with location inputted as gold star marker
                     script.
                         var loc="#{location}";
                         L.mapbox.accessToken = 'pk.eyJ1IjoidGltYmFnYnkiLCJhIjoiY2ltZmJ3b3AyMDFkanUxbHZ4bGxmczNkdiJ9.eCfTjhCRYWo-MQ19nSv-BQ';
@@ -32,13 +34,15 @@ if (result !== 'None')
                             marker.bindPopup("<b>Starter Location</b>");
                         }
         hr
-        - var index = 1;
+        - var index = 1; //result rank
         div(class="container-fluid")
+            // for each restaurant from yelp's result...
             each r in result
                 if (r.location.address)
                     div(class ="col-md-5 col-sm-8 well", id=r.id, style ="margin: 7px; left:7%")
                         div(class="media")
                             div(class="media-left media-middle")
+                                // yelp image
                                 - if (r.image_url != undefined)
                                     img(src= r.image_url, class="img-rounded media-object", height="80", width="80")
                                 - else
@@ -46,6 +50,7 @@ if (result !== 'None')
                             div(class="media-body media-left")
                                 h4(class="media-heading")
                                     b
+                                        //format name of restaurant to keep everthing on a single line
                                         if(r.name.length <= 27)
                                             u #{index + ". " + r.name}
                                         else
@@ -58,6 +63,7 @@ if (result !== 'None')
                                         - s = s.split(' ').join('+')
                                         - var start = location.split(' ').join('+');
                                         - var link = "https://www.google.com/maps/dir/"+start+"/"+s;
+                                        //address with link to google map
                                         if (r.location.address != "")
                                             if (addr.length <= 36)
                                                 a(href= link) #{addr}
@@ -66,28 +72,34 @@ if (result !== 'None')
                                         else
                                             | Food Truck
                                 p
+                                    //rating image for restaurant
                                     img(src= r.rating_img_url_large, alt=r.name+" Rating", height="25", width="125")
                                     | #{" "}
+                                    //yelp rating with link to yelp site
                                     a(href="http://www.yelp.com/biz/"+r.id) #{r.review_count + " Yelp reviews"}
                                     br
                                     span(class="glyphicon glyphicon-cutlery")
                                     | #{" "}
+                                    //yelp menu
                                     if (r.menu_provider != undefined)
                                         a(href= "http://www.yelp.com/menu/" + r.id ) Full Menu
                                     else
                                         | No Menu Provided
                                     | #{" | "}
+                                    //worth it index: the higher the index, the more the restaurant is worth it
                                     | #{"Worth It Index: "+ Math.round((r.rating*r.review_count)/index)}
                                     br
                                     - var catIndex = 0;
                                     - var catstr = "";
                                     small
+                                        //prints list of categories
                                         each cat in r.categories
                                             if (catIndex < (r.categories.length -1))
                                                 | #{cat[0] + ", "}
                                                 - catIndex ++;
                                             else
                                                 | #{cat[0]}
+                                //puts marker of restaurant on map with approiate number
                                 script.
                                     var name = "#{r.name}"
                                     var addr = "#{addr}"
