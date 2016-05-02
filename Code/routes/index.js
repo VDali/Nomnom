@@ -55,6 +55,10 @@ function initGoogle(loc) {
 }
 /* GET home page. */
 router.get('/', function(req, res, next) {
+    // if (typeof req.user != 'undefined') {
+    //     console.log(req.user.name);
+    // }
+    //res.locals.user = req.user;
     res.render('index', { title: 'NomNom' });
 });
 
