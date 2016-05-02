@@ -73,14 +73,14 @@ router.post('/',function(req,res, next) {
     var yelp = initYelp();
     var parameters = {};
     var usedb;
-    var found = 0;
+    var found = 0; //used to determine if request is in database or not
 
-    //to see if request is already in the database
+    //to see if request is already in the database; Veena uses this later in the code too
     Restaurant.findOne({term: term, location: loc}, function (err, result) {
         if (result) {
             //console.log(result.data);
-            usedb = result;
-            found = 1;
+            usedb = result; //only saved to variable to use later cause result is used often
+            found = 1; //changed to 1 if request is already in the database
             if (result.length > 0) {
                 console.log('found ' + term + " in db");
             }
@@ -99,7 +99,7 @@ router.post('/',function(req,res, next) {
             var lng = result.results[0].geometry.location.lng;
             var coor = lat + ',' + lng;
 
-            if (found == 0) {
+            if (found == 0) { //NOT in database
                 yelp.search({term: term, ll: coor, sort: '1', radius_filter: '1610', category_filter: 'restaurants'})
                     .then(function (data) {
                         var s = JSON.stringify(data);
@@ -114,6 +114,7 @@ router.post('/',function(req,res, next) {
                         restaurant.data = s;
                         //restaurant.geoCode = parameters['google'];
 
+                        //saves request into restaurant database
                         restaurant.save(function (err) {
                             if (err) {
                                 throw err;
@@ -128,9 +129,9 @@ router.post('/',function(req,res, next) {
                         parameters['result'] = "None";
                         res.render('search', parameters);
                     });
-            } else {
+
+            } else {  //found in database so prints from database instead of making API call
                 var s = usedb.data;
-                //console.log(usedb);
                 var obj = JSON.parse(s);
                 var yelpRes = obj.businesses;
 
@@ -139,10 +140,10 @@ router.post('/',function(req,res, next) {
                 parameters['result'] = yelpRes;
                 res.render('search', parameters);
 
-                found = 0;
+                found = 0; //to prepare for next request
             }
         } else {
-            if (found == 0) {
+            if (found == 0) { //NOT in database
                 yelp.search({term: term, location: loc, sort: '1', radius_filter: '1610', category_filter: 'food, All'})
                     .then(function (data) {
                         var s = JSON.stringify(data);
@@ -157,9 +158,9 @@ router.post('/',function(req,res, next) {
                         parameters['result'] = "None";
                         res.render('search', parameters);
                     });
-            } else {
+
+            } else { //found in database
                 var s = usedb.data;
-                //console.log(usedb);
                 var obj = JSON.parse(s);
                 var yelpRes = obj.businesses;
 
@@ -173,6 +174,5 @@ router.post('/',function(req,res, next) {
         }
     });
 });
-
 
 module.exports = router;
