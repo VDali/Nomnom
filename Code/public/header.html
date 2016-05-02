@@ -1,0 +1,77 @@
+<meta charset="UTF-8">
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name="description" content="NomNom">
+<title>NomNom</title>
+<style>
+
+    li {
+        display: inline;
+        padding-right: 10px;
+    }
+
+    .pac-container {
+        z-index: 10000;
+    }
+</style>
+
+<!Booststrap>
+<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/flatly/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href='/stylesheets/style.css' rel='stylesheet'>
+
+<!Bootstrap JQuery>
+<link src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
+
+<!Angular>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js"></script>
+
+<!Google Autocomplete>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+
+<! JQuery>
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script rel='stylesheet' src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+<nav class="navbar navbar-default navbar-fixed-top" style="height: 60px; background:rgba(128,128,128, 0.3)">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href='/'>
+                <img src="../images/avocado2.png" style="position: relative;width:90px;height:60px;top: -20px;"></img>
+            </a>
+        </div>
+        <form class="form-inline navbar-left" role="search" method='post' action="/">
+            <div class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type='text' id="term" name='term' placeholder="Find..." class="form-control"
+                           style="height: 40px;">
+                </div>
+                <div class="form-group">
+                    <input type='text' id="location" name='location' placeholder="Near..." class="form-control"
+                           style="height: 40px;">
+                    <script>
+                        var input = document.getElementById('location');
+                        var autocomplete = new google.maps.places.Autocomplete(input);
+                    </script>
+                </div>
+                <button class="btn btn-warning" type='submit' style="height: 40px; background:#8ec14e; border: #8ec14e">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </div>
+        </form>
+        <ul class ="form-inline navbar-right">
+            <li class ="nav-item">
+                <div id="status" style="position: relative;"></div>
+            </li>
+            <li class ="nav-item">
+                <a href="auth/facebook"><button type="button" class="btn btn-default navbar-btn"
+                                                style="position: relative; background-color: transparent; border: none; top: -15px;">
+                    Log In
+                </button><a>
+            </li>
+            <li class ="nav-item">
+                <a></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
